@@ -7,6 +7,7 @@ from datetime import datetime
 import os.path
 import pathlib
 CURDIR = pathlib.Path(__file__).parent.resolve()
+CACHE_PATH = os.path.join(CURDIR, 'cache/weather.json')
 
 import matplotlib as mpl
 mpl.rcParams['font.size'] = 14
@@ -16,7 +17,6 @@ plt.rcParams['font.family'] = 'Helvetica'
 # mpl.rcParams['axes.spines.right'] = False
 mpl.rcParams['axes.spines.top'] = False
 
-CACHE_PATH = os.path.join(CURDIR, 'cache/weather.json')
 BASE_URL = 'https://api.weather.gov/points/{lat},{lon}'
 COORDINATES = {
 	'Somerville': [42.39, -71.0868],
