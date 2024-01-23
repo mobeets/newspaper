@@ -140,8 +140,9 @@ def main(city='Somerville', outdir=None, cached=True):
 	weather = load_cached_weather() if cached else fetch_weather()
 
 	plot_time_series(get_time_series(weather[city]['forecast']),
-		outfile=os.path.join(outdir, 'weather-forecast.png'))
-	plot_stats(weather, outfile=os.path.join(outdir, 'weather-ranges.png'))
+		outfile=fnm1)
+	plot_stats(weather, outfile=fnm2)
+	return {'forecast': fnm1, 'ranges': fnm2}
 
 if __name__ == '__main__':
 	main(cached=True)

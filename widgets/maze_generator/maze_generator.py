@@ -148,6 +148,13 @@ def showPNG(grid, start=None, end=None, shortest_path=None, outfile=None):
         plt.savefig(outfile)
     plt.close()
 
+def main(outfile, title=None):
+    m = Maze()
+    m.generator = Prims(9, 9)
+    m.generate()
+    m.generate_entrances()
+    plotXKCD(m.grid.copy(), start=m.start, end=m.end, outfile=outfile, title=title)
+
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
@@ -155,9 +162,4 @@ if __name__ == '__main__':
     else:
         title = None
     outfile = os.path.join(CURDIR, 'maze.png')
-
-    m = Maze()
-    m.generator = Prims(9, 9)
-    m.generate()
-    m.generate_entrances()
-    plotXKCD(m.grid.copy(), start=m.start, end=m.end, outfile=outfile, title=title)
+    main(outfile, title)
