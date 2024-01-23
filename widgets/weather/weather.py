@@ -7,7 +7,7 @@ from datetime import datetime
 import os.path
 import pathlib
 CURDIR = pathlib.Path(__file__).parent.resolve()
-CACHE_PATH = os.path.join(CURDIR, 'cache/weather.json')
+CACHE_PATH = os.path.join(CURDIR, '..', 'cache/weather.json')
 
 import matplotlib as mpl
 mpl.rcParams['font.size'] = 14

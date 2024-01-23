@@ -5,10 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch
 
-# from mazelib import Maze
-# from mazelib.generate.Prims import Prims
-from mazelib import Maze
-from Prims import Prims
+from .mazelib import Maze
+from .Prims import Prims
 
 CURDIR = os.path.abspath(os.path.join(pathlib.Path(__file__).parent.resolve(), '..', 'cache'))
 
@@ -148,12 +146,19 @@ def showPNG(grid, start=None, end=None, shortest_path=None, outfile=None):
         plt.savefig(outfile)
     plt.close()
 
-def main(outfile, title=None):
+def render(outfile, title=None):
     m = Maze()
     m.generator = Prims(9, 9)
     m.generate()
     m.generate_entrances()
     plotXKCD(m.grid.copy(), start=m.start, end=m.end, outfile=outfile, title=title)
+
+def main(outdir):
+    for name in ['Robin', 'Jordan']:
+        fnm = 'maze_{}.png'.format(name[0].lower())
+        outfile = os.path.join(outdir, fnm)
+        title = "{}'s maze".format(name)
+        render(outfile=outfile, title=title)
 
 if __name__ == '__main__':
     import sys
@@ -162,4 +167,4 @@ if __name__ == '__main__':
     else:
         title = None
     outfile = os.path.join(CURDIR, 'maze.png')
-    main(outfile, title)
+    render(outfile, title)

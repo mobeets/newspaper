@@ -1,7 +1,7 @@
 import random
 from functools import reduce
-from board import *
-from solver import *
+from .board import Board
+from .solver import Solver
 
 class Generator:
 

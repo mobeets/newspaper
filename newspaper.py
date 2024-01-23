@@ -3,7 +3,7 @@ import os.path
 import pathlib
 import subprocess
 from datetime import datetime
-from widgets import sports, weather, sudoku_generator, maze_generator
+from widgets.run import run_widgets
 
 CURDIR = os.path.abspath(os.path.join(pathlib.Path(__file__).parent.resolve()))
 TEMPLATE_DIR = os.path.join(CURDIR, 'tex')
@@ -18,26 +18,7 @@ def get_paths():
 	return {'renderdir': dirname, 'texpath': texpath, 'imagedir': imagedir, 'templatedir': TEMPLATE_DIR}
 
 def make_new_folder(paths):
-	shutil.copytree(paths['templatedir'], paths['dirname'], dirs_exist_ok=True)
-
-def run_widgets(paths, cached):
-	results = {'sudoku': None, 'NBA': None, 'NHL': None}
-
-	# sports: returns NBA and NHL games and standings
-	results['NBA'] = sports.main('NBA', cached=cached)
-	results['NHL'] = sports.main('NHL', cached=cached)
-
-	# weather: saves two images (must pass dirname)
-	weather.main(paths['imagedir'], cached=cached)
-
-	# games: returns sudoku; saves maze image
-	results['sudoku'] = sudoku_generator.sudoku_generator(mode='medium')
-	maze_generator.maze_generator(os.path.join(paths['imagedir'], 'maze.png'))
-
-	# comics: saves images
-	# todo
-
-	return results
+	shutil.copytree(paths['templatedir'], paths['renderdir'], dirs_exist_ok=True)
 
 def render_tex(results, paths):
 	# render sudoku, NBA, NHL
@@ -45,7 +26,7 @@ def render_tex(results, paths):
 	pass
 
 def build_tex(paths):
-	subprocess.check_call(['pdflatex', '-halt-on-error', '-output-directory', paths['dirname'], paths['texpath']])
+	subprocess.check_call(['pdflatex', '-halt-on-error', '-output-directory', paths['renderdir'], paths['texpath']])
 
 def main(cached=True):
 	# get paths we will use for today's paper
@@ -64,4 +45,4 @@ def main(cached=True):
 	build_tex(paths)
 
 if __name__ == '__main__':
-	main()
+	main(cached=True)

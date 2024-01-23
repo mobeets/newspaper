@@ -2,7 +2,7 @@
 import sys
 import os.path
 import pathlib
-from generator import *
+from .generator import Generator
 CURDIR = pathlib.Path(__file__).parent.resolve()
 
 # setting difficulties and their cutoffs for each solve method
