@@ -1,7 +1,7 @@
 from .sports import sports
 from .weather import weather
-from .maze_generator import maze_generator
-from .sudoku_generator import sudoku_generator
+from .maze import maze_generator
+from .sudoku import sudoku_generator
 
 def run_widgets(paths, cached=True):
 	results = {'sudoku': None, 'NBA': None, 'NHL': None}
@@ -30,9 +30,16 @@ def render_tex(results, paths):
 	# update issue number
 	content = content.replace('\currentissue{1}', '\currentissue{{{}}}'.format(paths['issue_number']))
 
-	# render sudoku, NBA, NHL
+	# render NBA, NHL
+
+	# render sudoku
+	tag_start = '\\begin{sudoku-block}'
+	tag_end = '\\end{sudoku-block}'
+	pre, post = content.split(tag_start)
+	_, post = post.split(tag_end)
+	sudoku = tag_start + results['sudoku'] + tag_end
+	content = pre + sudoku + post
 
 	# write new tex
 	with open(paths['texpath'], 'w') as f:
 		f.write(content)
-
