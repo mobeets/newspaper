@@ -21,3 +21,18 @@ def run_widgets(paths, cached=True):
 	# todo
 
 	return results
+
+def render_tex(results, paths):
+	# read tex
+	with open(paths['texpath']) as f:
+		content = f.read()
+
+	# update issue number
+	content = content.replace('\currentissue{1}', '\currentissue{{{}}}'.format(paths['issue_number']))
+
+	# render sudoku, NBA, NHL
+
+	# write new tex
+	with open(paths['texpath'], 'w') as f:
+		f.write(content)
+

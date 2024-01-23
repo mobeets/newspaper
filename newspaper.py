@@ -3,7 +3,7 @@ import os.path
 import pathlib
 import subprocess
 from datetime import datetime
-from widgets.run import run_widgets
+from widgets.main import run_widgets, render_tex
 
 CURDIR = os.path.abspath(os.path.join(pathlib.Path(__file__).parent.resolve()))
 TEMPLATE_DIR = os.path.join(CURDIR, 'tex')
@@ -11,19 +11,16 @@ RENDERED_DIR = os.path.join(CURDIR, 'rendered')
 TEMPLATE_NAME = 'newspaper.tex'
 
 def get_paths():
-	dirname = datetime.now().strftime('%Y%m%d')
-	dirname = os.path.join(RENDERED_DIR, dirname)
-	texpath = os.path.join(dirname, TEMPLATE_NAME)
-	imagedir = os.path.join(dirname, 'images')
-	return {'renderdir': dirname, 'texpath': texpath, 'imagedir': imagedir, 'templatedir': TEMPLATE_DIR}
+	today = datetime.now()
+	issue_number = (today-datetime(2024,1,23)).days
+	dirname = today.strftime('%Y%m%d')
+	renderdir = os.path.join(RENDERED_DIR, dirname)
+	texpath = os.path.join(renderdir, TEMPLATE_NAME)
+	imagedir = os.path.join(renderdir, 'images')
+	return {'renderdir': renderdir, 'texpath': texpath, 'imagedir': imagedir, 'templatedir': TEMPLATE_DIR, 'issue_number': issue_number}
 
 def make_new_folder(paths):
 	shutil.copytree(paths['templatedir'], paths['renderdir'], dirs_exist_ok=True)
-
-def render_tex(results, paths):
-	# render sudoku, NBA, NHL
-	# update vol/edition number
-	pass
 
 def build_tex(paths):
 	subprocess.check_call(['pdflatex', '-halt-on-error', '-output-directory', paths['renderdir'], paths['texpath']])
