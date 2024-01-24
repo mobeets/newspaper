@@ -23,6 +23,7 @@
 
 %****** 	Package Loading   *****
 \RequirePackage{yfonts}  % used for the paper title font
+\RequirePackage{datenumber}
 
 %******		main code *****
 
@@ -77,7 +78,7 @@
 \raisebox{12pt}{\textbf{\footnotesize \@paperlocation}}\\
 \vspace*{0.1in}
 \rule[0pt]{\textwidth}{0.5pt}\\
-{\small VOL.\MakeUppercase{\roman{volume}}\ldots No.\arabic{issue}} \hfill \MakeUppercase{\small\it\@date} \hfill {\small\MakeUppercase{\@paperprice}}\\
+{\small VOL.\MakeUppercase{\roman{volume}}\ldots No.\arabic{issue}} \hfill \MakeUppercase{\small\it\datedayname, \@date} \hfill {\small\MakeUppercase{\@paperprice}}\\
 \rule[6pt]{\textwidth}{1.2pt}
 \end{center}
 \pagestyle{plain}
