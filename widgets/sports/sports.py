@@ -67,8 +67,10 @@ def get_team_info(results, team_name):
 	for tag in ['Next Game', 'Record']:
 		item = [x for x in soup.find_all('strong') if tag in x.text][0].parent.text.strip()
 		out = ' '.join(item.split())
+		if 'Record' in out:
+			out = out.split('Division')[0]
 		items.append(out)
-	return team_name + '\n' + '\n'.join(items)
+	return '\\textbf{' + team_name + '}' + '\n\n' + '\n\n'.join(items) + '\n'
 
 def is_cached(name, cache_path=CACHE_PATH):
 	return os.path.exists(cache_path.format(name))
@@ -89,7 +91,7 @@ def fetch(sport, base_urls, cache_path=CACHE_PATH):
 def render_scores(sport, scores):
 	df = pd.DataFrame(scores)
 	table = df.to_latex(index=False, header=False)
-	return """{} games last night:\n""".format(sport.upper()) + table
+	return '\\textbf{' + '{} games last night:\n'.format(sport.upper()) + '}' + table
 
 def render_standings(sport, standings):
 	output = ''
@@ -104,8 +106,8 @@ def render_standings(sport, standings):
 def render(scores, standings, sport, team_info, outdir):
 	fnm = os.path.join(outdir, '{}_scores.tex'.format(sport))
 	with open(fnm, 'w') as f:
-		out = team_info
-		out += render_scores(sport, scores)
+		out = render_scores(sport, scores)
+		out += '\n' + team_info
 		f.write(out)
 
 	fnm = os.path.join(outdir, '{}_standings.tex'.format(sport))
