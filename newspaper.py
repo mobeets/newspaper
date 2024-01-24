@@ -1,13 +1,16 @@
+import sys
 import shutil
 import os.path
 import pathlib
 import subprocess
 from datetime import datetime
-from widgets.main import run_widgets, render_tex
 
-CURDIR = os.path.abspath(os.path.join(pathlib.Path(__file__).parent.resolve()))
-TEMPLATE_DIR = os.path.join(CURDIR, 'tex')
-RENDERED_DIR = os.path.join(CURDIR, 'rendered')
+CUR_DIR = pathlib.Path(__file__).parent.resolve()
+sys.path.append(os.path.join(CUR_DIR, 'widgets'))
+from widgets.main import run_widgets
+
+TEMPLATE_DIR = os.path.join(CUR_DIR, 'tex')
+RENDERED_DIR = os.path.join(CUR_DIR, 'rendered')
 TEMPLATE_NAME = 'newspaper.tex'
 
 def get_paths():
@@ -17,13 +20,26 @@ def get_paths():
 	renderdir = os.path.join(RENDERED_DIR, dirname)
 	texpath = os.path.join(renderdir, TEMPLATE_NAME)
 	imagedir = os.path.join(renderdir, 'images')
-	return {'renderdir': renderdir, 'texpath': texpath, 'imagedir': imagedir, 'templatedir': TEMPLATE_DIR, 'issue_number': issue_number}
+	datadir = os.path.join(renderdir, 'data')
+	return {'renderdir': renderdir, 'texpath': texpath, 'imagedir': imagedir, 'datadir': datadir, 'templatedir': TEMPLATE_DIR, 'issue_number': issue_number}
 
 def make_new_folder(paths):
 	shutil.copytree(paths['templatedir'], paths['renderdir'], dirs_exist_ok=True)
 
+def render_tex(paths):
+	# read tex
+	with open(paths['texpath']) as f:
+		content = f.read()
+
+	# update issue number
+	content = content.replace('\currentissue{1}', '\currentissue{{{}}}'.format(paths['issue_number']))
+
+	# write new tex
+	with open(paths['texpath'], 'w') as f:
+		f.write(content)
+
 def build_tex(paths):
-	subprocess.check_call(['pdflatex', '-halt-on-error', '-output-directory', paths['renderdir'], paths['texpath']])
+	subprocess.check_call(['pdflatex', '-output-directory', paths['renderdir'], paths['texpath']])
 
 def main(cached=True):
 	# get paths we will use for today's paper
@@ -33,10 +49,10 @@ def main(cached=True):
 	make_new_folder(paths)
 
 	# run each widget (write images to images/ in new dir)
-	results = run_widgets(paths, cached)
+	run_widgets(paths, cached)
 
 	# render newspaper.tex (e.g., update sudoko)
-	render_tex(results, paths)
+	render_tex(paths)
 
 	# build newspaper.tex -> newspaper.pdf
 	build_tex(paths)

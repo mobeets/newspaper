@@ -1,3 +1,5 @@
+# maze_generator.py
+
 import os.path
 import pathlib
 import numpy as np
@@ -5,11 +7,10 @@ import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch
 
-from .mazelib import Maze
-from .Prims import Prims
+from mazelib import Maze
+from Prims import Prims
 
-CURDIR = os.path.abspath(os.path.join(pathlib.Path(__file__).parent.resolve(), '..', 'cache'))
-
+CACHE_DIR = os.path.abspath(os.path.join(pathlib.Path(__file__).parent.resolve(), '..', 'cache'))
 FIGSIZE = (5,5)
 
 def use_run(codes, vertices, run):
@@ -161,10 +162,4 @@ def main(outdir):
         render(outfile=outfile, title=title)
 
 if __name__ == '__main__':
-    import sys
-    if len(sys.argv) > 1:
-        title = sys.argv[1]
-    else:
-        title = None
-    outfile = os.path.join(CURDIR, 'maze.png')
-    render(outfile, title)
+    main(CACHE_DIR)

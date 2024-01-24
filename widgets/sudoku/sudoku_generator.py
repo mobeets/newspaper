@@ -2,8 +2,9 @@
 import sys
 import os.path
 import pathlib
-from .generator import Generator
+from generator import Generator
 CURDIR = pathlib.Path(__file__).parent.resolve()
+CACHE_DIR = os.path.abspath(os.path.join(CURDIR, '..', 'cache'))
 
 # setting difficulties and their cutoffs for each solve method
 difficulties = {
@@ -13,7 +14,13 @@ difficulties = {
     'extreme': (81, 15)
 }
 
-def main(mode):
+def render(content, outfile):
+    template = """Jess's Sudoku\\vspace{0.2cm}\n\n\\begin{sudoku-block}""" + content + """\n\\end{sudoku-block}"""
+    print(outfile)
+    with open(outfile, 'w') as f:
+        f.write(template)
+
+def main(mode='medium', outdir=CACHE_DIR):
     # getting desired difficulty from command line
     difficulty = difficulties[mode]
 
@@ -38,8 +45,9 @@ def main(mode):
     final = gen.board.copy()
 
     # render in format used by sudoku latex package
-    rendered = '|' + str(final).replace('_', ' ').replace('\r\n', '|.\n|') + '|.'
-    return rendered
+    content = '|' + str(final).replace('_', ' ').replace('\r\n', '|.\n|') + '|.'
+    
+    render(content, os.path.join(outdir, 'sudoku.tex'))
 
 if __name__ == '__main__':
     main()

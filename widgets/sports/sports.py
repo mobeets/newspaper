@@ -1,11 +1,13 @@
-import json
-import requests
-from bs4 import BeautifulSoup
-
 import os.path
 import pathlib
+import json
+import requests
+import pandas as pd
+from bs4 import BeautifulSoup
+
 CURDIR = pathlib.Path(__file__).parent.resolve()
-CACHE_PATH = os.path.join(CURDIR, '..', 'cache/{}-scores.json')
+CACHE_DIR = os.path.abspath(os.path.join(CURDIR, '..', 'cache'))
+CACHE_PATH = os.path.join(CACHE_DIR, '{}-scores.json')
 
 MAX_SCORES = 4
 BASE_URLS = {
@@ -15,25 +17,26 @@ BASE_URLS = {
 
 TEAM_PREFS = ['Boston', 'Dallas']
 
-def get_score(team):
+def get_score(team, prefix=''):
 	name = team.find('a').text
 	score = team.find_all('td')[1].text
-	return {'name': name, 'score': score}
+	return {prefix: name, prefix + 'score': score}
 
 def get_scores(soup, max_scores, team_prefs):
 	scores = []
 	for item in soup.select('.game_summary'):
-		team1 = get_score(item.select('.winner')[0])
-		team2 = get_score(item.select('.loser')[0])
-		scores.append([team1, team2])
+		row = get_score(item.select('.winner')[0], 'winner')
+		row2 = get_score(item.select('.loser')[0], 'loser')
+		row.update(row2)
+		scores.append(row)
 
 	if len(scores) > max_scores:
 		# trim scores, but prioritize some teams
 		inds = []
 		for i in range(len(scores)):
-			tm1,tm2 = scores[i]
+			row = scores[i]
 			for tm in team_prefs:
-				if tm in [tm1['name'], tm2['name']]:
+				if tm in [row['winner'], row['loser']]:
 					inds.append(i)
 		new_inds = inds + [i for i in range(len(scores)) if i not in inds]
 		scores = [scores[i] for i in new_inds[:max_scores]]
@@ -66,7 +69,31 @@ def fetch_scores(sport, base_url, cache_path=CACHE_PATH):
 	json.dump(content, open(cache_path.format(sport), 'w'))
 	return content
 
-def main(sport, cached=True, max_scores=MAX_SCORES, team_prefs=TEAM_PREFS):
+def render_scores(sport, scores):
+	df = pd.DataFrame(scores)
+	table = df.to_latex(index=False, header=False)
+	return """{} games last night:\n""".format(sport.upper()) + table
+
+def render_standings(sport, standings):
+	output = ''
+	for conf in standings:
+		df = pd.DataFrame(standings)
+		df.index += 1
+		df = df.reset_index()
+		output += df.style.to_latex()
+		output += '\n\n'
+	return """{} standings:\n""" + output
+
+def render(scores, standings, sport, outdir):
+	fnm = os.path.join(outdir, '{}_scores.tex'.format(sport))
+	with open(fnm, 'w') as f:
+		f.write(render_scores(sport, scores))
+
+	fnm = os.path.join(outdir, '{}_standings.tex'.format(sport))
+	with open(fnm, 'w') as f:
+		f.write(render_standings(sport, standings))
+
+def main(sport, outdir=CACHE_DIR, cached=True, max_scores=MAX_SCORES, team_prefs=TEAM_PREFS):
 
 	if cached:
 		content = load_cached(sport)
@@ -75,8 +102,8 @@ def main(sport, cached=True, max_scores=MAX_SCORES, team_prefs=TEAM_PREFS):
 	soup = BeautifulSoup(content, features="lxml")
 	scores = get_scores(soup, max_scores, team_prefs)
 	standings = get_standings(soup)
-	return {'scores': scores, 'standings': standings}
+	render(scores, standings, sport, outdir)
 
 if __name__ == '__main__':
 	main('NBA', cached=True)
-	main('NHL', cached=True)
+	# main('NHL', cached=True)
