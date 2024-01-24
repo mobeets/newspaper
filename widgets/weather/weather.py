@@ -6,8 +6,9 @@ from datetime import datetime
 
 import os.path
 import pathlib
-CURDIR = pathlib.Path(__file__).parent.resolve()
-CACHE_PATH = os.path.join(CURDIR, '..', 'cache/weather.json')
+CUR_DIR = pathlib.Path(__file__).parent.resolve()
+CACHE_DIR = os.path.abspath(os.path.join(CUR_DIR, '..', 'cache'))
+CACHE_PATH = os.path.join(CACHE_DIR, 'weather.json')
 
 import matplotlib as mpl
 mpl.rcParams['font.size'] = 14
@@ -26,8 +27,9 @@ COORDINATES = {
 	'Austin': [30.2672, -97.7431],
 	}
 
-def plot_time_series(rows, outfile=None):
-	plt.figure(figsize=(4,2))
+def plot_time_series(rows, outfile=None, fig=None, yticks=None):
+	if fig is None:
+		plt.figure(figsize=(4,2))
 	xs = np.array([row['dt'].hour for row in rows])
 	ys1 = np.array([row['temp'] for row in rows])
 	ys2 = 100*np.array([row['precip'] for row in rows])
@@ -39,7 +41,8 @@ def plot_time_series(rows, outfile=None):
 	plt.xlabel('hour')
 	plt.ylabel('temp. (F)', color=color)
 	plt.xticks(ticks=xs[ix][::2].astype(int), rotation=90)
-	yticks = np.linspace(ys1[ix].min(), ys1[ix].max(), 4).astype(int)
+	if yticks is None:
+		yticks = np.linspace(ys1[ix].min(), ys1[ix].max(), 4).astype(int)
 	plt.yticks(ticks=yticks)
 
 	ax2 = plt.gca().twinx()
@@ -51,12 +54,14 @@ def plot_time_series(rows, outfile=None):
 	plt.tight_layout()
 	plt.title("Today's forecast")
 
-	if outfile is not None:
-		plt.savefig(outfile)
-	plt.close()
+	if fig is None:
+		if outfile is not None:
+			plt.savefig(outfile)
+		plt.close()
 
-def plot_stats_inner(stats, outfile=None):
-	plt.figure(figsize=(3,2))
+def plot_stats_inner(stats, outfile=None, fig=None):
+	if fig is None:
+		plt.figure(figsize=(3,2))
 	xs = []
 	ymin = 100
 	ymax = 0
@@ -70,12 +75,13 @@ def plot_stats_inner(stats, outfile=None):
 			ymax = stat['high']
 	plt.xticks(ticks=range(len(stats)), labels=xs, rotation=90, fontsize=10)
 	yticks = np.linspace(ymin, ymax, 4).astype(int)
-	plt.yticks(yticks)
+	plt.yticks(yticks, rotation=0)
 	plt.gca().axes.spines.right.set_visible(False)
 	plt.tight_layout()
-	if outfile is not None:
-		plt.savefig(outfile)
-	plt.close()
+	if fig is None:
+		if outfile is not None:
+			plt.savefig(outfile)
+		plt.close()
 
 def is_same_day(dt1, dt2):
 	return dt1.year == dt2.year and dt1.month == dt2.month and dt1.day == dt2.day
@@ -106,11 +112,11 @@ def get_stats(rows):
 		temps.append(row['temp'])
 	return {'low': low, 'high': high, 'mean': np.mean(temps)}
 
-def plot_stats(weather, outfile=None):
+def plot_stats(weather, outfile=None, fig=None):
 	stats = {}
 	for city in weather:
 		stats[city] = get_stats(get_time_series(weather[city]['forecast']))
-	plot_stats_inner(stats, outfile=outfile)
+	plot_stats_inner(stats, outfile=outfile, fig=fig)
 
 def load_cached_weather():
 	return json.load(open(CACHE_PATH))
@@ -130,19 +136,24 @@ def fetch_weather(cities=None, base_url=BASE_URL, cachepath=CACHE_PATH):
 	json.dump(cache, open(CACHE_PATH, 'w'))
 	return cache
 
-def main(city='Somerville', outdir=None, cached=True):
-	if outdir is None:
-		outdir = os.path.join(CURDIR, 'cache')
-	
-	fnm1 = os.path.join(outdir, 'weather-forecast.png')
-	fnm2 = os.path.join(outdir, 'weather-ranges.png')
+def plot(weather, city, outfile=None):
+	time_series = get_time_series(weather[city]['forecast'])
 
+	fig = plt.figure(figsize=(6,4))
+	plt.subplot(1,2,1)
+	plot_stats(weather, fig=fig)
+	yticks = plt.gca().get_yticks()
+	plt.subplot(1,2,2)
+	plot_time_series(time_series, fig=fig, yticks=None)
+	plt.tight_layout()
+	if outfile is not None:
+		plt.savefig(outfile)
+	plt.close()
+
+def main(city='Somerville', outdir=CACHE_DIR, cached=True):
 	weather = load_cached_weather() if cached else fetch_weather()
-
-	plot_time_series(get_time_series(weather[city]['forecast']),
-		outfile=fnm1)
-	plot_stats(weather, outfile=fnm2)
-	return {'forecast': fnm1, 'ranges': fnm2}
+	outfile = os.path.join(outdir, 'weather.png')
+	plot(weather, city, outfile)
 
 if __name__ == '__main__':
-	main(cached=True)
+	main(cached=False)
