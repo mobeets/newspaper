@@ -2,7 +2,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import os.path
 import pathlib
@@ -65,15 +65,18 @@ def plot_stats_inner(stats, outfile=None, fig=None):
 	xs = []
 	ymin = 100
 	ymax = 0
-	for i, (city, stat) in enumerate(stats.items()):
-		plt.plot(i*np.ones(2), [stat['low'], stat['high']], 'k-')
-		plt.plot(i, stat['mean'], 'ko', markersize=4)
+	for i, (city, cstats) in enumerate(stats.items()):
+		xsc = np.arange(len(cstats))/(2*len(cstats))
+		xsc += i - xsc.mean()
 		xs.append(city)
-		if stat['low'] < ymin:
-			ymin = stat['low']
-		if stat['high'] > ymax:
-			ymax = stat['high']
-	plt.xticks(ticks=range(len(stats)), labels=xs, rotation=90, fontsize=10)
+		for j, stat in enumerate(cstats):
+			plt.plot(xsc[j]*np.ones(2), [stat['low'], stat['high']], 'k-', alpha=1 if j==0 else 0.3)
+			plt.plot(xsc[j], stat['mean'], 'ko', markersize=4, alpha=1 if j==0 else 0.3)
+			if stat['low'] < ymin:
+				ymin = stat['low']
+			if stat['high'] > ymax:
+				ymax = stat['high']
+	plt.xticks(ticks=range(len(stats)), labels=xs, rotation=90)
 	yticks = np.linspace(ymin, ymax, 4).astype(int)
 	plt.yticks(yticks, rotation=0)
 	plt.gca().axes.spines.right.set_visible(False)
@@ -89,8 +92,8 @@ def is_same_day(dt1, dt2):
 def dtstr_to_dt(dtstr):
 	return datetime.strptime(dtstr[:13], '%Y-%M-%dT%H')
 
-def get_time_series(forecast):
-	today = datetime.now()
+def get_time_series(forecast, days_ahead=0):
+	today = datetime.now() + timedelta(days=days_ahead)
 	rows = []
 	for item in forecast['properties']['periods']:
 		dt = dtstr_to_dt(item['startTime'])
@@ -112,10 +115,12 @@ def get_stats(rows):
 		temps.append(row['temp'])
 	return {'low': low, 'high': high, 'mean': np.mean(temps)}
 
-def plot_stats(weather, outfile=None, fig=None):
+def plot_stats(weather, outfile=None, fig=None, max_days_ahead=2):
 	stats = {}
 	for city in weather:
-		stats[city] = get_stats(get_time_series(weather[city]['forecast']))
+		stats[city] = []
+		for days_ahead in range(max_days_ahead+1):
+			stats[city].append(get_stats(get_time_series(weather[city]['forecast'], days_ahead=days_ahead)))
 	plot_stats_inner(stats, outfile=outfile, fig=fig)
 
 def load_cached_weather():
@@ -156,4 +161,4 @@ def main(city='Somerville', outdir=CACHE_DIR, cached=True):
 	plot(weather, city, outfile)
 
 if __name__ == '__main__':
-	main(cached=False)
+	main(cached=True)

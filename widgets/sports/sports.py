@@ -11,9 +11,10 @@ CACHE_PATH = os.path.join(CACHE_DIR, 'scores-{}.html')
 
 MAX_SCORES = 4
 BASE_URLS = {
-	'NBA': 'https://www.basketball-reference.com/boxscores/',
-	'NHL': 'https://www.hockey-reference.com/boxscores/'
+	'NBA': {'recent': 'https://www.basketball-reference.com/boxscores/', 'team_info': 'https://www.basketball-reference.com/teams/DAL/2024.html'},
+	'NHL': {'recent': 'https://www.hockey-reference.com/boxscores/', 'team_info': 'https://www.hockey-reference.com/teams/BOS/2024.html'}
 	}
+TEAM_NAMES = {'NBA': 'Dallas Mavericks', 'NHL': 'Boston Bruins'}
 
 TEAM_PREFS = ['Boston', 'Dallas']
 
@@ -59,15 +60,31 @@ def get_standings(soup):
 			standings[conf_name].append(vals)
 	return standings
 
+def get_team_info(results, team_name):
+	soup = BeautifulSoup(results['team_info'], features="lxml")
+	
+	items = []
+	for tag in ['Next Game', 'Record']:
+		item = [x for x in soup.find_all('strong') if tag in x.text][0].parent.text.strip()
+		out = ' '.join(item.split())
+		items.append(out)
+	return team_name + '\n' + '\n'.join(items)
+
+def is_cached(name, cache_path=CACHE_PATH):
+	return os.path.exists(cache_path.format(name))
+
 def load_cached(sport, cache_path=CACHE_PATH):
 	return json.load(open(cache_path.format(sport)))
 
-def fetch_scores(sport, base_url, cache_path=CACHE_PATH):
-	session = requests.Session()
-	response = session.get(base_url)
-	content = response.text
-	json.dump(content, open(cache_path.format(sport), 'w'))
-	return content
+def fetch(sport, base_urls, cache_path=CACHE_PATH):
+	results = {}
+	for name, base_url in base_urls.items():
+		session = requests.Session()
+		response = session.get(base_url)
+		content = response.text
+		results[name] = content
+	json.dump(results, open(cache_path.format(sport), 'w'))
+	return results
 
 def render_scores(sport, scores):
 	df = pd.DataFrame(scores)
@@ -84,10 +101,12 @@ def render_standings(sport, standings):
 		output += '\n\n'
 	return """{} standings:\n""" + output
 
-def render(scores, standings, sport, outdir):
+def render(scores, standings, sport, team_info, outdir):
 	fnm = os.path.join(outdir, '{}_scores.tex'.format(sport))
 	with open(fnm, 'w') as f:
-		f.write(render_scores(sport, scores))
+		out = team_info
+		out += render_scores(sport, scores)
+		f.write(out)
 
 	fnm = os.path.join(outdir, '{}_standings.tex'.format(sport))
 	with open(fnm, 'w') as f:
@@ -95,14 +114,16 @@ def render(scores, standings, sport, outdir):
 
 def main(sport, outdir=CACHE_DIR, cached=True, max_scores=MAX_SCORES, team_prefs=TEAM_PREFS):
 
-	if cached:
-		content = load_cached(sport)
+	if cached and is_cached(sport):
+		results = load_cached(sport)
 	else:
-		content = fetch_scores(sport, BASE_URLS[sport])
-	soup = BeautifulSoup(content, features="lxml")
+		results = fetch(sport, BASE_URLS[sport])
+
+	soup = BeautifulSoup(results['recent'], features="lxml")
 	scores = get_scores(soup, max_scores, team_prefs)
 	standings = get_standings(soup)
-	render(scores, standings, sport, outdir)
+	team_info = get_team_info(results, TEAM_NAMES[sport])
+	render(scores, standings, sport, team_info, outdir)
 
 if __name__ == '__main__':
 	main('NBA', cached=True)
