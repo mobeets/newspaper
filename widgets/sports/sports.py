@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 CURDIR = pathlib.Path(__file__).parent.resolve()
 CACHE_DIR = os.path.abspath(os.path.join(CURDIR, '..', 'cache'))
-CACHE_PATH = os.path.join(CACHE_DIR, '{}-scores.json')
+CACHE_PATH = os.path.join(CACHE_DIR, 'scores-{}.html')
 
 MAX_SCORES = 4
 BASE_URLS = {
@@ -106,4 +106,4 @@ def main(sport, outdir=CACHE_DIR, cached=True, max_scores=MAX_SCORES, team_prefs
 
 if __name__ == '__main__':
 	main('NBA', cached=True)
-	# main('NHL', cached=True)
+	main('NHL', cached=True)

@@ -1,6 +1,7 @@
 .DS_Store
 *.pyc
 rendered/*
+widgets/cache/*
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

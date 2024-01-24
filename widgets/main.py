@@ -9,6 +9,7 @@ sys.path.append(os.path.join(CUR_DIR, 'sudoku'))
 
 from sports import sports
 from weather import weather
+from comics import comics
 from maze import maze_generator
 from sudoku import sudoku_generator
 
@@ -28,7 +29,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True):
 	maze_generator.main(outdir=paths['imagedir'])
 
 	# comics: saves images
-	# todo
+	comics.main('xkcd', outdir=paths['imagedir'], cached=cached)
 
 if __name__ == '__main__':
 	run_widgets()
