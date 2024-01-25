@@ -39,6 +39,8 @@ def get_movie_list(soup):
 	return movies
 
 def add_movie_info(item):
+	if not item.get('movie_url', ''):
+		return item
 	content = fetch(item['movie_url'], save_cache=False)
 	soup = BeautifulSoup(content, features="lxml")
 
@@ -51,6 +53,8 @@ def add_movie_info(item):
 	return item
 
 def render(item, outfile):
+	if not item:
+		return
 	with open(outfile, 'w') as f:
 		if not item.get('name', ''):
 			return

@@ -29,13 +29,11 @@ def get_comic(soup, name):
 		url = img.attrs['src']
 		binary = requests.get(url).content
 		return {'url': url, 'binary': binary, 'ext': '.gif'}
-	# elif name == 'farside':
-	# 	img = soup.select('.tfs-comic__image')[0].select('img')[0]
-	# 	url = img.attrs['data-src']
-	# 	binary = requests.get(url).content
-	# 	return {'url': url, 'binary': binary, 'ext': '.gif'}
+	return {}
 
 def render(item, outfile):
+	if not item.get('binary', ''):
+		return
 	outfile += item.get('ext', '.png')
 	with open(outfile, 'wb') as f:
 		f.write(item['binary'])

@@ -18,20 +18,34 @@ DEFAULT_PATHS = {'imagedir': CACHE_DIR, 'datadir': CACHE_DIR}
 
 def run_widgets(paths=DEFAULT_PATHS, cached=True):
 	# sports: returns NBA and NHL games and standings
-	sports.main('NBA', outdir=paths['datadir'], cached=cached)
-	sports.main('NHL', outdir=paths['datadir'], cached=cached)
+	for sport_name in ['NBA', 'NHL']:
+		try:
+			sports.main(sport_name, outdir=paths['datadir'], cached=cached)
+		except:
+			pass
 
 	# weather: saves two images (must pass dirname)
-	weather.main(outdir=paths['imagedir'], cached=cached)
+	try:
+		weather.main(outdir=paths['imagedir'], cached=cached)
+	except:
+		pass
 
 	# games: returns sudoku; saves maze image
-	sudoku_generator.main(mode='medium', outdir=paths['datadir'])
-	maze_generator.main(outdir=paths['imagedir'])
+	try:
+		sudoku_generator.main(mode='medium', outdir=paths['datadir'])
+	except:
+		pass
+	try:
+		maze_generator.main(outdir=paths['imagedir'])
+	except:
+		pass
 
 	# comics: saves images
-	comics.main('xkcd', outdir=paths['imagedir'], cached=cached)
-	comics.main('calvinandhobbes', outdir=paths['imagedir'], cached=cached)
-	comics.main('pearls', outdir=paths['imagedir'], cached=cached)
+	for comic_name in ['xkcd', 'calvinandhobbes', 'pearls']:
+		try:
+			comics.main(comic_name, outdir=paths['imagedir'], cached=cached)
+		except:
+			pass
 
 if __name__ == '__main__':
 	run_widgets()
