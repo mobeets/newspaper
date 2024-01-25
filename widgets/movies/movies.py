@@ -9,10 +9,29 @@ from datetime import datetime
 
 CUR_DIR = pathlib.Path(__file__).parent.resolve()
 CACHE_DIR = os.path.abspath(os.path.join(CUR_DIR, '..', 'cache'))
+HISTORY_PATH = os.path.join(CACHE_DIR, 'movies_shown.txt')
 CACHE_PATH = os.path.join(CACHE_DIR, 'movie_list.html')
 
 BASE_URL = 'https://www.rottentomatoes.com/browse/movies_at_home/affiliates:amazon_prime,apple_tv_plus,disney_plus,max_us,netflix~sort:newest'
 BASE_MOVIE_URL = 'https://www.rottentomatoes.com'
+
+def update_history(new_movie, history_path=HISTORY_PATH):
+	movie_list = load_history(history_path)
+	movie_list.append(new_movie.get('name', ''))
+	with open(history_path, 'w') as f:
+		f.write('\n'.join(movie_list))
+
+def load_history(history_path=HISTORY_PATH):
+	if not os.path.exists(history_path):
+		return []
+	return [x.strip() for x in open(history_path).readlines()]
+
+def pick_movie(movie_list):
+	prev_movies = load_history()
+	for item in movie_list:
+		if item.get('name', '') not in prev_movies:
+			return item
+	return {}
 
 def is_cached(cache_path=CACHE_PATH):
 	return os.path.exists(cache_path)
@@ -76,8 +95,11 @@ def main(outdir=CACHE_DIR, cached=True):
 		content = fetch()
 	soup = BeautifulSoup(content, features="lxml")
 	movie_list = get_movie_list(soup)
-	movie = add_movie_info(movie_list[0])
-	render(movie, os.path.join(outdir, 'movie.tex'))
+	movie = pick_movie(movie_list)
+	movie = add_movie_info(movie)
+	if movie:
+		render(movie, os.path.join(outdir, 'movie.tex'))
+		update_history(movie)
 
 if __name__ == '__main__':
 	main(cached=True)
