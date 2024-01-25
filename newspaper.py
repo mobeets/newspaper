@@ -13,6 +13,8 @@ TEMPLATE_DIR = os.path.join(CUR_DIR, 'tex')
 RENDERED_DIR = os.path.join(CUR_DIR, 'rendered')
 TEMPLATE_NAME = 'newspaper.tex'
 
+LATEX_PATH = '/Library/TeX/texbin/'
+
 def get_paths():
 	today = datetime.now()
 	issue_number = (today-datetime(2024,1,23)).days
@@ -39,7 +41,7 @@ def render_tex(paths):
 		f.write(content)
 
 def build_tex(paths):
-	subprocess.check_call(['pdflatex', '-output-directory', paths['renderdir'], paths['texpath']])
+	subprocess.check_call([LATEX_PATH + 'pdflatex', '-output-directory', paths['renderdir'], paths['texpath']])
 
 def main(cached=True):
 	# get paths we will use for today's paper
