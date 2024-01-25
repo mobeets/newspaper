@@ -4,6 +4,7 @@ import json
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
+from datetime import datetime, timedelta
 
 CURDIR = pathlib.Path(__file__).parent.resolve()
 CACHE_DIR = os.path.abspath(os.path.join(CURDIR, '..', 'cache'))
@@ -23,7 +24,19 @@ def get_score(team, prefix=''):
 	score = team.find_all('td')[1].text
 	return {prefix: name, prefix + 'score': score}
 
+def game_date(soup):
+	dtstr = soup.select('.prevnext')[0].find('span').text
+	return datetime.strptime(dtstr, '%b %d, %Y')
+
+def game_date_was_last_night(soup):
+	dt_game = game_date(soup)
+	dt = datetime.today() - timedelta(days=1)
+	return dt.year == dt_game.year and dt.month == dt_game.month and dt.day == dt_game.day 
+
 def get_scores(soup, max_scores, team_prefs):
+	if not game_date_was_last_night(soup):
+		return []
+
 	scores = []
 	for item in soup.select('.game_summary'):
 		row = get_score(item.select('.winner')[0], 'winner')
@@ -89,11 +102,15 @@ def fetch(sport, base_urls, cache_path=CACHE_PATH):
 	return results
 
 def render_scores(sport, scores):
+	if not scores:
+		return ''
 	df = pd.DataFrame(scores)
 	table = df.to_latex(index=False, header=False)
 	return '\\textbf{' + '{} games last night:\n'.format(sport.upper()) + '}' + table
 
 def render_standings(sport, standings):
+	if not standings:
+		return ''
 	output = ''
 	for conf in standings:
 		df = pd.DataFrame(standings)
@@ -107,7 +124,8 @@ def render(scores, standings, sport, team_info, outdir):
 	fnm = os.path.join(outdir, '{}_scores.tex'.format(sport))
 	with open(fnm, 'w') as f:
 		out = render_scores(sport, scores)
-		out += '\n' + team_info
+		if team_info:
+			out += '\n' + team_info
 		f.write(out)
 
 	fnm = os.path.join(outdir, '{}_standings.tex'.format(sport))

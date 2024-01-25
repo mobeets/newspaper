@@ -30,6 +30,8 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True):
 
 	# comics: saves images
 	comics.main('xkcd', outdir=paths['imagedir'], cached=cached)
+	comics.main('calvinandhobbes', outdir=paths['imagedir'], cached=cached)
+	comics.main('pearls', outdir=paths['imagedir'], cached=cached)
 
 if __name__ == '__main__':
 	run_widgets()

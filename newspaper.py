@@ -58,4 +58,8 @@ def main(cached=True):
 	build_tex(paths)
 
 if __name__ == '__main__':
-	main(cached=True)
+	import argparse
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--refresh', action='store_true')
+	args = parser.parse_args()
+	main(cached=not args.refresh)
