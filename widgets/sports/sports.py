@@ -10,7 +10,8 @@ CURDIR = pathlib.Path(__file__).parent.resolve()
 CACHE_DIR = os.path.abspath(os.path.join(CURDIR, '..', 'cache'))
 CACHE_PATH = os.path.join(CACHE_DIR, 'scores-{}.html')
 
-MAX_SCORES = 4
+MAX_SCORES = 3
+
 BASE_URLS = {
 	'NBA': {'recent': 'https://www.basketball-reference.com/boxscores/', 'team_info': 'https://www.basketball-reference.com/teams/DAL/2024.html'},
 	'NHL': {'recent': 'https://www.hockey-reference.com/boxscores/', 'team_info': 'https://www.hockey-reference.com/teams/BOS/2024.html'}
