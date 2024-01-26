@@ -15,6 +15,8 @@ TEMPLATE_NAME = 'newspaper.tex'
 
 LATEX_PATH = '/Library/TeX/texbin/'
 
+PRINT_CMD = 'lp -o page-ranges=1 -o landscape -o ColorModel=Gray'
+
 def get_paths():
 	today = datetime.now()
 	issue_number = (today-datetime(2024,1,23)).days
@@ -43,7 +45,11 @@ def render_tex(paths):
 def build_tex(paths):
 	subprocess.check_call([LATEX_PATH + 'pdflatex', '-output-directory', paths['renderdir'], paths['texpath']])
 
-def main(cached=True):
+def send_to_printer(paths):
+	pdfpath = paths['texpath'].replace('.tex', '.pdf')
+	subprocess.check_call(PRINT_CMD.split() + [pdfpath])
+
+def main(cached=True, do_print=False):
 	# get paths we will use for today's paper
 	paths = get_paths()
 
@@ -63,9 +69,14 @@ def main(cached=True):
 	print("Building pdf...")
 	build_tex(paths)
 
+	if do_print:
+		print("Sending to printer...")
+		send_to_printer(paths)
+
 if __name__ == '__main__':
 	import argparse
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--refresh', action='store_true')
+	parser.add_argument('--print', action='store_true')
 	args = parser.parse_args()
-	main(cached=not args.refresh)
+	main(cached=not args.refresh, do_print=args.print)
