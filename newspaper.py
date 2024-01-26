@@ -14,7 +14,6 @@ RENDERED_DIR = os.path.join(CUR_DIR, 'rendered')
 TEMPLATE_NAME = 'newspaper.tex'
 
 LATEX_PATH = '/Library/TeX/texbin/'
-
 PRINT_CMD = 'lp -o page-ranges=1 -o landscape -o ColorModel=Gray'
 
 def get_paths():

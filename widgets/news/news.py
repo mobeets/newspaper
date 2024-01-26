@@ -20,9 +20,15 @@ def get_headlines(soup, max_count=MAX_HEADLINES):
 		headlines.append(unicode_to_latex(headline))
 	return headlines
 
+def render_headlines(headlines):
+	out = '\\begin{enumerate}\n'
+	out += '\n'.join(['\\item ' + line for line in headlines])
+	out += '\\end{enumerate}'
+	return out
+
 def render(headlines, outfile):
 	with open(outfile, 'w') as f:
-		out = '\n\n\\noindent '.join(headlines)
+		out = render_headlines(headlines)
 		f.write(out)
 
 def main(name, cached=True, outdir=CACHE_DIR):
@@ -32,4 +38,4 @@ def main(name, cached=True, outdir=CACHE_DIR):
 	render(headlines, outfile)
 
 if __name__ == '__main__':
-	main()
+	main(name='sports')

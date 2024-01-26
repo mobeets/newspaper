@@ -49,11 +49,11 @@ def get_scores(soup, max_scores, team_prefs):
 	if len(scores) > max_scores:
 		# trim scores, but prioritize some teams
 		inds = []
+		is_match = lambda tmps, tms: any([tmp in tmc for tmc in tms for tmp in tmps])
 		for i in range(len(scores)):
 			row = scores[i]
-			for tm in team_prefs:
-				if tm in [row['winner'], row['loser']]:
-					inds.append(i)
+			if is_match(team_prefs, [row['winner'], row['loser']]):
+				inds.append(i)
 		new_inds = inds + [i for i in range(len(scores)) if i not in inds]
 		scores = [scores[i] for i in new_inds[:max_scores]]
 	return scores
@@ -79,13 +79,13 @@ def get_team_info(results, team_name):
 	soup = BeautifulSoup(results['team_info'], features="lxml")
 	
 	items = []
-	for tag in ['Next Game', 'Record']:
+	for tag in ['Record', 'Next Game']:
 		item = [x for x in soup.find_all('strong') if tag in x.text][0].parent.text.strip()
 		out = ' '.join(item.split())
 		if 'Record' in out:
 			out = out.split('Division')[0]
 		items.append(out)
-	return '\\textbf{' + team_name + '}' + '\n\n' + '\n\n'.join(items) + '\n'
+	return {'name': team_name, 'items': items}
 
 def is_cached(name, cache_path=CACHE_PATH):
 	return os.path.exists(cache_path.format(name))
@@ -122,12 +122,15 @@ def render_standings(sport, standings):
 		output += '\n\n'
 	return """{} standings:\n""" + output
 
+def render_team_info(team_info):
+	return '\\textbf{' + team_info['name'] + '}' + '\n\n' + '\n\n'.join(team_info['items'])
+
 def render(scores, standings, sport, team_info, outdir):
 	fnm = os.path.join(outdir, '{}_scores.tex'.format(sport))
 	with open(fnm, 'w') as f:
 		out = render_scores(sport, scores)
 		if team_info:
-			out += '\n' + team_info
+			out += '\n' + render_team_info(team_info)
 		f.write(out)
 
 	fnm = os.path.join(outdir, '{}_standings.tex'.format(sport))
@@ -149,5 +152,5 @@ def main(sport, outdir=CACHE_DIR, cached=True, max_scores=MAX_SCORES, team_prefs
 	render(scores, standings, sport, team_info, outdir)
 
 if __name__ == '__main__':
-	main('NBA', cached=True)
+	# main('NBA', cached=True)
 	main('NHL', cached=True)
