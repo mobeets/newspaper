@@ -48,15 +48,19 @@ def main(cached=True):
 	paths = get_paths()
 
 	# copy template directory to our new directory
+	print("Creating new folder...")
 	make_new_folder(paths)
 
 	# run each widget (write images to images/ in new dir)
+	print("Running widgets...")
 	run_widgets(paths, cached)
 
-	# render newspaper.tex (e.g., update sudoko)
+	# render newspaper.tex
+	print("Rendering tex...")
 	render_tex(paths)
 
 	# build newspaper.tex -> newspaper.pdf
+	print("Building pdf...")
 	build_tex(paths)
 
 if __name__ == '__main__':

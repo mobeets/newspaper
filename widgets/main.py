@@ -19,31 +19,33 @@ CACHE_DIR = os.path.join(CUR_DIR, 'cache')
 DEFAULT_PATHS = {'imagedir': CACHE_DIR, 'datadir': CACHE_DIR}
 
 def run_widgets(paths=DEFAULT_PATHS, cached=True):
-	# sports: writes NBA and NHL games and standings .tex
+	# sports: writes .tex
 	for sport_name in ['NBA', 'NHL']:
 		try:
 			sports.main(sport_name, outdir=paths['datadir'], cached=cached)
 		except:
 			pass
 
-	# weather: saves two images (must pass dirname)
+	# weather: saves two images
 	try:
 		weather.main(outdir=paths['imagedir'], cached=cached)
 	except:
 		pass
 
-	# games: returns sudoku; saves maze image
+	# sudoku: writes. tex
 	try:
 		sudoku_generator.main(mode='medium', outdir=paths['datadir'])
 	except:
 		pass
+
+	# maze: saves two images
 	try:
 		maze_generator.main(outdir=paths['imagedir'])
 	except:
 		pass
 
 	# comics: saves images
-	for comic_name in ['xkcd', 'calvinandhobbes', 'pearls']:
+	for comic_name in ['calvinandhobbes', 'pearls']:
 		try:
 			comics.main(comic_name, outdir=paths['imagedir'], cached=cached)
 		except:
@@ -51,13 +53,13 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True):
 
 	# news: writes .tex
 	try:
-		news.main(name='sports', outdir=paths['imagedir'], cached=cached)
+		news.main(name='sports', outdir=paths['datadir'], cached=cached)
 	except:
 		pass
 
 	# movies: writes .tex
 	try:
-		movies.main(outdir=paths['imagedir'], cached=cached)
+		movies.main(outdir=paths['datadir'], cached=cached)
 	except:
 		pass
 
