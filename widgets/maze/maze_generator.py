@@ -158,7 +158,8 @@ def main(outdir):
     for name in ['Robin', 'Jordan']:
         fnm = 'maze_{}.png'.format(name[0].lower())
         outfile = os.path.join(outdir, fnm)
-        title = "{}'s maze".format(name)
+        # title = "{}'s maze".format(name)
+        title = None
         render(outfile=outfile, title=title)
 
 if __name__ == '__main__':

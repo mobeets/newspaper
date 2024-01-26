@@ -15,7 +15,8 @@ difficulties = {
 }
 
 def render(content, outfile):
-    template = """Jess's Sudoku\\vspace{0.2cm}\n\n\\begin{sudoku-block}""" + content + """\n\\end{sudoku-block}"""
+    # header = """Jess's Sudoku\\vspace{0.2cm}\n\n"""
+    template = """\\begin{sudoku-block}""" + content + """\n\\end{sudoku-block}"""
     print(outfile)
     with open(outfile, 'w') as f:
         f.write(template)

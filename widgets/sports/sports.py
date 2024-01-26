@@ -5,6 +5,7 @@ import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
+from pylatexenc.latexencode import unicode_to_latex
 
 CURDIR = pathlib.Path(__file__).parent.resolve()
 CACHE_DIR = os.path.abspath(os.path.join(CURDIR, '..', 'cache'))
@@ -131,7 +132,8 @@ def render(scores, standings, sport, team_info, outdir):
 
 	fnm = os.path.join(outdir, '{}_standings.tex'.format(sport))
 	with open(fnm, 'w') as f:
-		f.write(render_standings(sport, standings))
+		out = render_standings(sport, standings)
+		f.write(out)
 
 def main(sport, outdir=CACHE_DIR, cached=True, max_scores=MAX_SCORES, team_prefs=TEAM_PREFS):
 

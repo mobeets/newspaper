@@ -41,7 +41,7 @@ def render_tex(paths):
 		f.write(content)
 
 def build_tex(paths):
-	subprocess.check_output([LATEX_PATH + 'pdflatex', '-output-directory', paths['renderdir'], paths['texpath']])
+	subprocess.check_call([LATEX_PATH + 'pdflatex', '-output-directory', paths['renderdir'], paths['texpath']])
 
 def main(cached=True):
 	# get paths we will use for today's paper

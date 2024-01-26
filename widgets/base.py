@@ -17,7 +17,10 @@ class Scraper:
 			raise Exception("You must provide a cache filename if you want to load from cache.")
 
 		self.cache_dir = cache_dir
-		self.cache_path = os.path.join(self.cache_dir, self.cache_file + '.html')
+		if self.cache_file is not None:
+			self.cache_path = os.path.join(self.cache_dir, self.cache_file + '.html')
+		else:
+			self.cache_path = None
 
 		self.content = self.get_content()
 		self.soup = BeautifulSoup(self.content, features="lxml")
@@ -32,7 +35,7 @@ class Scraper:
 		session = requests.Session()
 		response = session.get(self.url)
 		content = response.text
-		if self.update_cache:
+		if self.update_cache and self.cache_path is not None:
 			with open(self.cache_path, 'w') as f:
 				f.write(content)
 		return content

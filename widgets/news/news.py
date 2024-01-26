@@ -1,6 +1,7 @@
 import sys
 import os.path
 import pathlib
+from pylatexenc.latexencode import unicode_to_latex
 
 # add parent dir so we can import Scraper
 CUR_DIR = pathlib.Path(__file__).parent.resolve()
@@ -16,7 +17,7 @@ def get_headlines(soup, max_count=MAX_HEADLINES):
 	headlines = []
 	for item in soup.find('main').select('.PageList-items-item')[:max_count]:
 		headline = [x.strip() for x in item.text.split('\n') if x][0]
-		headlines.append(headline)
+		headlines.append(unicode_to_latex(headline))
 	return headlines
 
 def render(headlines, outfile):
