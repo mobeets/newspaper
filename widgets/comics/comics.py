@@ -38,7 +38,7 @@ def render(item, outfile):
 	with open(outfile, 'wb') as f:
 		f.write(item['binary'])
 	if item.get('ext', '.gif'):
-		subprocess.check_call(['convert', outfile, outfile.replace('.gif', '.png')])
+		subprocess.check_output(['convert', outfile, outfile.replace('.gif', '.png')])
 
 def is_cached(name, cache_path=CACHE_PATH):
 	return os.path.exists(cache_path.format(name))

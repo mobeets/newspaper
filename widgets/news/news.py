@@ -24,10 +24,10 @@ def render(headlines, outfile):
 		out = '\n\n\\noindent '.join(headlines)
 		f.write(out)
 
-def main(name='sports', cached=True, outdir=CACHE_DIR):
+def main(name, cached=True, outdir=CACHE_DIR):
 	sc = Scraper(url=BASE_URLS[name], cache_file='sports-news', try_cache=cached)
 	headlines = get_headlines(sc.soup)
-	outfile = os.path.join(outdir, 'sports-news.tex')
+	outfile = os.path.join(outdir, '{}-news.tex'.format(name))
 	render(headlines, outfile)
 
 if __name__ == '__main__':

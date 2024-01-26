@@ -10,6 +10,8 @@ sys.path.append(os.path.join(CUR_DIR, 'sudoku'))
 from sports import sports
 from weather import weather
 from comics import comics
+from news import news
+from movies import movies
 from maze import maze_generator
 from sudoku import sudoku_generator
 
@@ -17,7 +19,7 @@ CACHE_DIR = os.path.join(CUR_DIR, 'cache')
 DEFAULT_PATHS = {'imagedir': CACHE_DIR, 'datadir': CACHE_DIR}
 
 def run_widgets(paths=DEFAULT_PATHS, cached=True):
-	# sports: returns NBA and NHL games and standings
+	# sports: writes NBA and NHL games and standings .tex
 	for sport_name in ['NBA', 'NHL']:
 		try:
 			sports.main(sport_name, outdir=paths['datadir'], cached=cached)
@@ -46,6 +48,18 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True):
 			comics.main(comic_name, outdir=paths['imagedir'], cached=cached)
 		except:
 			pass
+
+	# news: writes .tex
+	try:
+		news.main(name='sports', outdir=paths['imagedir'], cached=cached)
+	except:
+		pass
+
+	# movies: writes .tex
+	try:
+		movies.main(outdir=paths['imagedir'], cached=cached)
+	except:
+		pass
 
 if __name__ == '__main__':
 	run_widgets()
