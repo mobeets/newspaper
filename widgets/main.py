@@ -1,6 +1,7 @@
 import sys
 import os.path
 import pathlib
+from datetime import datetime
 
 # must add these to path to get relative imports working
 CUR_DIR = pathlib.Path(__file__).parent.resolve()
@@ -77,7 +78,9 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 
 	# sudoku: writes. tex
 	try:
-		sudoku_generator.main(mode='medium', outdir=paths['datadir'])
+		modes = ['medium']*4 + ['hard']*2 + ['extreme']
+		mode = modes[datetime.now().weekday()]
+		sudoku_generator.main(mode=mode, outdir=paths['datadir'])
 	except:
 		pass_or_raise(debug)
 
