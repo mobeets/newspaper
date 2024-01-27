@@ -6,6 +6,7 @@ import pathlib
 CUR_DIR = pathlib.Path(__file__).parent.resolve()
 sys.path.append(os.path.join(CUR_DIR, 'maze'))
 sys.path.append(os.path.join(CUR_DIR, 'sudoku'))
+sys.path.append(os.path.join(CUR_DIR, 'numberlink'))
 
 from sports import sports
 from weather import weather
@@ -14,6 +15,7 @@ from news import news, pokemon
 from movies import movies
 from maze import maze_generator
 from sudoku import sudoku_generator
+from numberlink import gen as numberlink_generator
 
 CACHE_DIR = os.path.join(CUR_DIR, 'cache')
 DEFAULT_PATHS = {'imagedir': CACHE_DIR, 'datadir': CACHE_DIR}
@@ -35,6 +37,12 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True):
 	# sudoku: writes. tex
 	try:
 		sudoku_generator.main(mode='medium', outdir=paths['datadir'])
+	except:
+		pass
+
+	# numberlink: writes. tex
+	try:
+		numberlink_generator.main(w=9, h=9, outdir=paths['datadir'])
 	except:
 		pass
 

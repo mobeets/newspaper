@@ -1,3 +1,4 @@
+import os.path
 import random
 from mitm import Mitm
 from grid import Grid
@@ -126,7 +127,22 @@ def make(w, h, mitm, min_numbers=0, max_numbers=1000):
         # print(grid)
         # print(f'Gave up after {tries} tries')
 
-def main(w=10, h=10, n=1, no_colors=False, terminal_only=False):
+def render(grid, color_grid):
+    out = ''
+    out += '\\begin{sudoku-block}\n'
+    for y in range(color_grid.h):
+        out += '|'
+        for x in range(color_grid.w):
+            if grid[x, y] in 'v^<>':
+                out += color_grid[x, y]
+            else:
+                out += ' '
+            out += '|'
+        out += '.\n'
+    out += '\\end{sudoku-block}'
+    return out
+
+def main(w=9, h=9, outdir=None, no_colors=True):
 
     # w, h = args.width, args.height
     if w < 4 or h < 4:
@@ -143,24 +159,18 @@ def main(w=10, h=10, n=1, no_colors=False, terminal_only=False):
     # work.
     mitm.prepare(min(20, max(h, 6)))
 
-    for _ in range(n):
-        grid = make(w, h, mitm, min_numbers, max_numbers)
-        tube_grid, uf = grid.make_tubes()
-        color_grid, mapping = draw.color_tubes(grid, no_colors=no_colors)
+    # make puzzle
+    grid = make(w, h, mitm, min_numbers, max_numbers)
+    tube_grid, uf = grid.make_tubes()
+    color_grid, mapping = draw.color_tubes(grid, no_colors=no_colors)
 
-        # Print stuff
-        for y in range(color_grid.h):
-            for x in range(color_grid.w):
-                if grid[x, y] in 'v^<>':
-                    print(color_grid[x, y], end='')
-                else:
-                    print('.', end='')
-            print()
-
-        # Draw with pyplot
-        if False:#not terminal_only:
-            draw.plot_puzzle(tube_grid, uf, include_solution=False)
-
+    # print
+    out = render(grid, color_grid)
+    if outdir is None:
+        print(out)
+    else:
+        with open(os.path.join(outdir, 'numberlink.tex'), 'w') as f:
+            f.write(out)
 
 if __name__ == '__main__':
     main()
