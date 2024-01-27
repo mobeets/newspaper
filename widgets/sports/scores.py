@@ -46,11 +46,12 @@ class BoxScores(Scraper):
 		return scores
 
 	def render(self, sport, scores, outfile=None):
-		if not scores:
-			return ''
-		df = pd.DataFrame(scores)
-		table = df.to_latex(index=False, header=False)
-		out = '\\textbf{' + '{} games last night'.format(sport.upper()) + ':}\n' + table
+		if scores:
+			df = pd.DataFrame(scores)
+			table = df.to_latex(index=False, header=False)
+			out = '\\textbf{' + '{} games last night'.format(sport.upper()) + ':}\n' + table
+		else:
+			out = ''
 		
 		if outfile is not None:
 			with open(outfile, 'w') as f:

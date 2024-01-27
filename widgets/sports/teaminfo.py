@@ -29,9 +29,10 @@ class TeamInfo(Scraper):
 		return info
 
 	def render(self, team_name, info, outfile=None):
-		if not info:
-			return ''
-		out = '\\textbf{' + team_name + '}' + '\n\n' + '\n\n'.join(info)
+		if info:
+			out = '\\textbf{' + team_name + '}' + '\n\n' + '\n\n'.join(info)
+		else:
+			out = ''
 		if outfile is not None:
 			with open(outfile, 'w') as f:
 				f.write(out)
