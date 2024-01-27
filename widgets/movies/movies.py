@@ -89,9 +89,9 @@ def render(item, outfile, max_summary_len=MAX_SUMMARY_LEN):
 				summ = summ[:max_summary_len] + '...'
 			out += ': {}'.format(unicode_to_latex(summ))
 		if item.get('director', ''):
-			out += '. Directed by ' + unicode_to_latex(item['director']) + '.'
+			out += ' Directed by ' + unicode_to_latex(item['director']) + '.'
 		if item.get('starring', []):
-			out += '. Starring ' + unicode_to_latex(', '.join(item['starring'])) + '.'
+			out += ' Starring ' + unicode_to_latex(', '.join(item['starring'])) + '.'
 		f.write(out)
 
 def main(outdir=CACHE_DIR, cached=True):
