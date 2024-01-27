@@ -13,10 +13,10 @@ from maze import maze_generator
 from sudoku import sudoku_generator
 from numberlink import numberlink_generator
 from scrapers import sports_scores, sports_standings, sports_teaminfo, sports_headlines, weather, comics, pokemon, movies, music
-from scrapers.base import CACHE_DIR
 
-# CACHE_DIR = os.path.join(CUR_DIR, 'cache')
-DEFAULT_PATHS = {'imagedir': CACHE_DIR, 'datadir': CACHE_DIR}
+IMG_DIR = os.path.join(CUR_DIR, '..', 'tex', 'images')
+DATA_DIR = os.path.join(CUR_DIR, '..', 'tex', 'data')
+DEFAULT_PATHS = {'imagedir': IMG_DIR, 'datadir': DATA_DIR}
 
 def pass_or_raise(debug):
 	if debug:
