@@ -10,7 +10,7 @@ sys.path.append(os.path.join(CUR_DIR, 'sudoku'))
 from sports import sports
 from weather import weather
 from comics import comics
-from news import news
+from news import news, pokemon
 from movies import movies
 from maze import maze_generator
 from sudoku import sudoku_generator
@@ -51,13 +51,21 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True):
 		except:
 			pass
 
-	# news: writes .tex
+	# sports headlines from AP News (writes .tex)
 	try:
-		# sports headlines from AP News
 		news.main(name='sports', outdir=paths['datadir'], cached=cached)
-
-		# new best albums from Pitchfork
+	except:
+		pass
+	
+	# new best albums from Pitchfork (writes .tex)
+	try:
 		news.main(name='music', outdir=paths['datadir'], cached=cached)
+	except:
+		pass
+	
+	# new pokemon (writes .tex and saves .png)
+	try:
+		pokemon.main(outdir=paths['imagedir'], datadir=paths['datadir'], cached=cached)
 	except:
 		pass
 
