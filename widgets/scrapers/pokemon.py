@@ -5,13 +5,8 @@ import random
 import requests
 from datetime import datetime, timedelta
 from pylatexenc.latexencode import unicode_to_latex
+from base import Scraper, CACHE_DIR
 
-# add parent dir so we can import Scraper
-CUR_DIR = pathlib.Path(__file__).parent.resolve()
-sys.path.append(os.path.abspath(os.path.join(CUR_DIR, '..')))
-from base import Scraper
-
-CACHE_DIR = os.path.abspath(os.path.join(CUR_DIR, '..', 'cache'))
 BASE_URL = 'https://www.pokemon.com/us/pokedex/{}'
 
 class Pokedex(Scraper):

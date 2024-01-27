@@ -7,9 +7,8 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime
 from pylatexenc.latexencode import unicode_to_latex
+from base import CACHE_DIR
 
-CUR_DIR = pathlib.Path(__file__).parent.resolve()
-CACHE_DIR = os.path.abspath(os.path.join(CUR_DIR, '..', 'cache'))
 HISTORY_PATH = os.path.join(CACHE_DIR, 'movies_shown.txt')
 CACHE_PATH = os.path.join(CACHE_DIR, 'movie_list.html')
 

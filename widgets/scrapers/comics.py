@@ -6,9 +6,8 @@ import subprocess
 import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime
+from base import CACHE_DIR
 
-CURDIR = pathlib.Path(__file__).parent.resolve()
-CACHE_DIR = os.path.abspath(os.path.join(CURDIR, '..', 'cache'))
 CACHE_PATH = os.path.join(CACHE_DIR, 'comic-{}.html')
 
 BASE_URLS = {

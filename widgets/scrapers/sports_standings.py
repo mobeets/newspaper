@@ -4,13 +4,7 @@ import pathlib
 import pandas as pd
 from datetime import datetime, timedelta
 from pylatexenc.latexencode import unicode_to_latex
-
-# add parent dir so we can import Scraper
-CUR_DIR = pathlib.Path(__file__).parent.resolve()
-sys.path.append(os.path.abspath(os.path.join(CUR_DIR, '..')))
-from base import Scraper
-
-CACHE_DIR = os.path.abspath(os.path.join(CUR_DIR, '..', 'cache'))
+from base import Scraper, CACHE_DIR
 
 BASE_URLS = {
 	'NBA': 'https://www.basketball-reference.com/boxscores',

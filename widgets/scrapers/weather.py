@@ -1,14 +1,10 @@
+import os.path
 import json
 import numpy as np
 import matplotlib.pyplot as plt
 import requests
 from datetime import datetime, timedelta
-
-import os.path
-import pathlib
-CUR_DIR = pathlib.Path(__file__).parent.resolve()
-CACHE_DIR = os.path.abspath(os.path.join(CUR_DIR, '..', 'cache'))
-CACHE_PATH = os.path.join(CACHE_DIR, 'weather.json')
+from base import Scraper, CACHE_DIR
 
 import matplotlib as mpl
 mpl.rcParams['font.size'] = 14
@@ -18,6 +14,7 @@ plt.rcParams['font.family'] = 'Helvetica'
 # mpl.rcParams['axes.spines.right'] = False
 mpl.rcParams['axes.spines.top'] = False
 
+CACHE_PATH = os.path.join(CACHE_DIR, 'weather.json')
 BASE_URL = 'https://api.weather.gov/points/{lat},{lon}'
 COORDINATES = {
 	'Somerville': [42.39, -71.0868],
@@ -123,6 +120,9 @@ def plot_stats(weather, outfile=None, fig=None, max_days_ahead=2):
 			stats[city].append(get_stats(get_time_series(weather[city]['forecast'], days_ahead=days_ahead)))
 	plot_stats_inner(stats, outfile=outfile, fig=fig)
 
+def is_cached():
+	return os.path.exists(CACHE_PATH)
+
 def load_cached_weather():
 	return json.load(open(CACHE_PATH))
 
@@ -156,7 +156,7 @@ def plot(weather, city, outfile=None):
 	plt.close()
 
 def main(city='Somerville', outdir=CACHE_DIR, cached=True):
-	weather = load_cached_weather() if cached else fetch_weather()
+	weather = load_cached_weather() if (cached and is_cached()) else fetch_weather()
 	outfile = os.path.join(outdir, 'weather.png')
 	plot(weather, city, outfile)
 

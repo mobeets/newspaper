@@ -1,7 +1,9 @@
 .DS_Store
 *.pyc
 rendered/*
-widgets/cache/*
+widgets/scrapers/cache/*
+widgets/scrapers/__cache__/*
+widgets/scrapers/__cache-old__/*
 __pycache__
 
 ## Core latex/pdflatex auxiliary files:

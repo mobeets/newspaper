@@ -5,7 +5,7 @@ import subprocess
 from bs4 import BeautifulSoup
 
 CUR_DIR = pathlib.Path(__file__).parent.resolve()
-CACHE_DIR = os.path.join(CUR_DIR, 'cache')
+CACHE_DIR = os.path.join(CUR_DIR, '__cache__')
 
 class Scraper:
 	def __init__(self, url, cache_file=None, try_cache=True, cache_dir=CACHE_DIR, update_cache=True):
