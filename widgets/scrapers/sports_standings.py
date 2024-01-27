@@ -14,39 +14,34 @@ BASE_URLS = {
 class Standings(Scraper):
 	def get(self):
 		confs = self.soup.select('.stats_table')
+		lkp = {'wins': 'W', 'losses': 'L', 'win_loss_pct': '\%', 'gb': 'GB', 'points': 'Pts'}
 		standings = {}
 		for conf in confs:
-			conf_name = conf.find('th').text
+			conf_name = conf.find('th').text.strip()
+			if conf_name == '':
+				conf_name = conf.select('.thead')[0].text.strip()
 			teams = conf.select('.full_table')
 			standings[conf_name] = []
 			for team in teams:
-				name = team.find('a').text.split(' ')[0]
+				name = team.find('a').text.strip()#.split(' ')[0]
 				vals = {'name': name}
 				for item in team.find_all('td'):
 					keys = [k for k in item.attrs if 'data-' in k]
 					key = item.attrs[keys[0]]
-					vals[key] = item.text
+					if key not in lkp:
+						continue
+					vals[lkp[key]] = item.text
 				standings[conf_name].append(vals)
 		return standings
 
-	def render_standings(sport, standings):
-		if not standings:
-			return ''
-		output = ''
-		for conf in standings:
-			df = pd.DataFrame(standings)
-			df.index += 1
-			df = df.reset_index()
-			output += df.style.to_latex()
-			output += '\n\n'
-		return """{} standings:\n""" + output
-
 	def render(self, sport, standings, outfile=None):
 		if standings:
-			df = pd.DataFrame(standings)
-			df.index += 1
-			df = df.reset_index()
-			out = '{} standings:\n'.format(sport) + df.style.to_latex()
+			out = '\\textbf{' + '{} Standings'.format(sport) + '}\n\n'
+			for conf in standings:
+				df = pd.DataFrame(standings[conf])
+				df.index += 1
+				out += '\\textit{' + conf + '}\n'
+				out += df.style.to_latex(hrules=False) + '\n\n'
 		else:
 			out = ''
 		if outfile is not None:
@@ -62,5 +57,5 @@ def main(sport, cached=True, outdir=CACHE_DIR):
 	sc.render(sport, standings, outfile=outfile)
 
 if __name__ == '__main__':
-	main(sport='NBA', cached=False)
-	main(sport='NHL', cached=False)
+	main(sport='NBA', cached=True)
+	main(sport='NHL', cached=True)

@@ -11,20 +11,32 @@ from widgets.main import run_widgets
 
 TEMPLATE_DIR = os.path.join(CUR_DIR, 'tex')
 RENDERED_DIR = os.path.join(CUR_DIR, 'rendered')
-TEMPLATE_NAME = 'newspaper.tex'
+
+DEFAULT_TEMPLATE = 'newspaper.tex'
+SUNDAY_TEMPLATE = 'sunday.tex'
+
+DEFAULT_PRINT_CMD = 'lp -o page-ranges=1 -o landscape -o ColorModel=Gray'
+SUNDAY_PRINT_CMD = 'lp -o landscape'
 
 LATEX_PATH = '/Library/TeX/texbin/'
-PRINT_CMD = 'lp -o page-ranges=1 -o landscape -o ColorModel=Gray'
 
 def get_paths():
 	today = datetime.now()
 	issue_number = (today-datetime(2024,1,23)).days
 	dirname = today.strftime('%Y%m%d')
 	renderdir = os.path.join(RENDERED_DIR, dirname)
-	texpath = os.path.join(renderdir, TEMPLATE_NAME)
+	
+	if today.weekday() == 6:
+		template_name = SUNDAY_TEMPLATE
+		print_cmd = SUNDAY_PRINT_CMD
+	else:
+		template_name = DEFAULT_TEMPLATE
+		print_cmd = DEFAULT_PRINT_CMD
+	texpath = os.path.join(renderdir, template_name)
+
 	imagedir = os.path.join(renderdir, 'images')
 	datadir = os.path.join(renderdir, 'data')
-	return {'renderdir': renderdir, 'texpath': texpath, 'imagedir': imagedir, 'datadir': datadir, 'templatedir': TEMPLATE_DIR, 'issue_number': issue_number}
+	return {'renderdir': renderdir, 'texpath': texpath, 'imagedir': imagedir, 'datadir': datadir, 'templatedir': TEMPLATE_DIR, 'issue_number': issue_number, 'print_command': print_cmd}
 
 def make_new_folder(paths):
 	shutil.copytree(paths['templatedir'], paths['renderdir'], dirs_exist_ok=True)
@@ -45,8 +57,9 @@ def build_tex(paths):
 	subprocess.check_call([LATEX_PATH + 'pdflatex', '-output-directory', paths['renderdir'], paths['texpath']])
 
 def send_to_printer(paths):
+	print_cmd = paths['print_command']
 	pdfpath = paths['texpath'].replace('.tex', '.pdf')
-	subprocess.check_call(PRINT_CMD.split() + [pdfpath])
+	subprocess.check_call(print_cmd.split() + [pdfpath])
 
 def main(cached=True, do_print=False):
 	# get paths we will use for today's paper

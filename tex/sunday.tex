@@ -1,0 +1,107 @@
+\documentclass[landscape]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+
+\usepackage{newspaper}
+\usepackage{sudoku}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\setlist{noitemsep}
+\setlist[enumerate]{label=$\circ$, leftmargin=0cm}
+\setlength\heavyrulewidth{0ex} % sports scores table
+
+\date{\today}
+\currentvolume{1}
+\currentissue{1}
+
+\SetPaperName{The Daily Hennig}
+\SetHeaderName{The Daily Hennig}
+\SetPaperLocation{Somerville, MA}
+\SetPaperSlogan{``All the News I Feel Like Printing.''}
+\SetPaperPrice{Zero Dollars}
+
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{picinpar}
+\usepackage{newspaper-mod} % modifies newspaper style
+\usepackage{ifthen}
+
+\setlength\textwidth{9.5in}		% article default = 418pt
+\setlength\textheight{7.0in}		% article default = 296pt
+
+\renewcommand\headline[1]{\begin{center} {\huge \textsl{ #1}}\\ %
+			\rule[5pt]{0.8\hsize}{0.5pt}\\ \end{center}}
+
+%%%%%%%%%  Front matter   %%%%%%%%%%
+\begin{document}
+\maketitle
+
+\begin{multicols}{3}
+\headline{Weather}
+\vspace{-0.5cm}\includegraphics[width=\linewidth]{images/weather.png}
+
+% \columnbreak
+\headline{Arts \& Culture}
+\vspace{-0.3cm}
+\input{data/movie.tex}
+
+\noindent\input{data/music-news.tex}
+
+\headline{Sports}
+\vspace{-0.3cm}
+\input{data/sports-news.tex}
+\begin{center}
+	\input{data/scores-NBA.tex}
+\end{center}
+\begin{minipage}{0.1\linewidth}
+	\includegraphics[width=\linewidth]{images/mavs-logo.png}
+\end{minipage}
+\begin{minipage}{0.9\linewidth}
+	\input{data/teams-DallasMavericks.tex}
+\end{minipage}
+\begin{center}
+	\input{data/standings-NBA.tex}
+\end{center}
+
+\hrule
+\begin{center}
+	\input{data/scores-NHL.tex}
+\end{center}
+\begin{minipage}{0.1\linewidth}
+	\includegraphics[width=\linewidth]{images/bruins-logo.png}
+\end{minipage}
+\begin{minipage}{0.9\linewidth}
+	\input{data/teams-BostonBruins.tex}
+\end{minipage}
+% \begin{center}
+% 	\input{data/standings-NHL.tex}
+% \end{center}
+
+\clearpage
+\headline{Games \& Comics}
+\vspace{-0.3cm}
+\begin{minipage}{0.45\linewidth}
+\includegraphics[width=\linewidth]{images/pokedex.png}
+\end{minipage}
+\begin{minipage}{0.45\linewidth}
+\input{data/pokedex.tex}
+\end{minipage}
+\center\includegraphics[width=\linewidth]{images/maze_j.png}
+
+\renewcommand*\sudokuformat[1]{\sffamily#1}
+\setlength\sudokusize{0.98\linewidth}
+\setlength\sudokuthickline{1pt}
+\begin{center}
+	\input{data/sudoku.tex}
+\end{center}
+\setlength\sudokuthickline{0.3pt}
+\begin{center}
+	\input{data/numberlink.tex}
+\end{center}
+\center\includegraphics[width=1.1\linewidth]{images/comic-pearls.png}
+\center\includegraphics[width=1.1\linewidth]{images/comic-calvinandhobbes.png}
+
+\end{multicols}
+
+\end{document}

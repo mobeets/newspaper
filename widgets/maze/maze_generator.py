@@ -147,20 +147,22 @@ def showPNG(grid, start=None, end=None, shortest_path=None, outfile=None):
         plt.savefig(outfile)
     plt.close()
 
-def render(outfile, title=None):
+def render(outfile, size=9, title=None):
     m = Maze()
-    m.generator = Prims(9, 9)
+    m.generator = Prims(size, size)
     m.generate()
     m.generate_entrances()
     plotXKCD(m.grid.copy(), start=m.start, end=m.end, outfile=outfile, title=title)
 
 def main(outdir):
-    for name in ['Robin', 'Jordan']:
+    sizes = [9, 15]
+    names = ['Robin', 'Jordan']
+    for name, size in zip(names, sizes):
         fnm = 'maze_{}.png'.format(name[0].lower())
         outfile = os.path.join(outdir, fnm)
         # title = "{}'s maze".format(name)
         title = None
-        render(outfile=outfile, title=title)
+        render(outfile=outfile, size=size, title=title)
 
 if __name__ == '__main__':
     main(CACHE_DIR)
