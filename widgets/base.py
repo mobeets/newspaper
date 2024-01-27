@@ -1,6 +1,7 @@
 import os.path
 import pathlib
 import requests
+import subprocess
 from bs4 import BeautifulSoup
 
 CUR_DIR = pathlib.Path(__file__).parent.resolve()
@@ -22,8 +23,9 @@ class Scraper:
 		else:
 			self.cache_path = None
 
-		self.content = self.get_content()
-		self.soup = self.parse(self.content)
+		if self.url is not None:
+			self.content = self.get_content()
+			self.soup = self.parse(self.content)
 
 	def parse(self, content):
 		return BeautifulSoup(content, features="lxml")
@@ -33,6 +35,17 @@ class Scraper:
 
 	def load_cached(self):
 		return open(self.cache_path).read()
+
+	def fetch_and_save_image(self, url, outfile, handle_gif=False):
+		binary = requests.get(url).content
+		with open(outfile, 'wb') as f:
+			f.write(binary)
+		if handle_gif:
+			if not outfile.endswith('.gif'):
+				raise Exception("Expected .gif when handle_gif=True")
+			print('Converting .gif to .png...')
+			subprocess.check_output(['convert', outfile, outfile.replace('.gif', '.png')])
+		return binary
 
 	def fetch(self, url=None, cache_path=None):
 		session = requests.Session()

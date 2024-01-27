@@ -19,7 +19,7 @@ BASE_URLS = {
 	}
 TEAM_NAMES = {'NBA': 'Dallas Mavericks', 'NHL': 'Boston Bruins'}
 
-TEAM_PREFS = ['Boston', 'Dallas']
+TEAM_PREFS = ['Boston', 'Dallas', 'Pittsburgh']
 
 def get_score(team, prefix=''):
 	name = team.find('a').text
