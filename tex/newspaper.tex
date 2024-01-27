@@ -9,7 +9,7 @@
 \usepackage{enumitem}
 \setlist{noitemsep}
 \setlist[enumerate]{label=$\circ$, leftmargin=0cm}
-\setlength\heavyrulewidth{0ex}
+\setlength\heavyrulewidth{0ex} % sports scores table
 
 \date{\today}
 \currentvolume{1}
@@ -25,16 +25,15 @@
 \usepackage{multicol}
 \usepackage{picinpar}
 \usepackage{newspaper-mod} % modifies newspaper style
+\usepackage{ifthen}
 
 \setlength\textwidth{9.5in}		% article default = 418pt
 \setlength\textheight{7.0in}		% article default = 296pt
 
-%%%%%%%%%  Front matter   %%%%%%%%%%
-
-\usepackage{lipsum}
 \renewcommand\headline[1]{\begin{center} {\huge \textsl{ #1}}\\ %
 			\rule[5pt]{0.8\hsize}{0.5pt}\\ \end{center}}
 
+%%%%%%%%%  Front matter   %%%%%%%%%%
 \begin{document}
 \maketitle
 
@@ -64,14 +63,18 @@
 \headline{Games \& Comics}
 \vspace{-0.3cm}
 
-% \begin{minipage}{0.45\linewidth}
-% \includegraphics[width=\linewidth]{images/pokedex.png}
-% \end{minipage}
-% \begin{minipage}{0.45\linewidth}
-% \input{data/pokedex.tex}
-% \end{minipage}
-
-\center\includegraphics[width=0.95\linewidth]{images/maze_r.png}
+\ifthenelse{\isodd{\today}}
+  {% odd days
+	\begin{minipage}{0.45\linewidth}
+	\includegraphics[width=\linewidth]{images/pokedex.png}
+	\end{minipage}
+	\begin{minipage}{0.45\linewidth}
+	\input{data/pokedex.tex}
+	\end{minipage}
+  }
+  {% even days
+   \center\includegraphics[width=0.95\linewidth]{images/maze_r.png}
+  }
 
 \renewcommand*\sudokuformat[1]{\sffamily#1}
 \setlength\sudokusize{0.98\linewidth}
