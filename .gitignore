@@ -2,6 +2,7 @@
 *.pyc
 rendered/*
 widgets/cache/*
+__pycache__
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
