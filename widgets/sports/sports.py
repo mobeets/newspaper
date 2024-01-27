@@ -33,7 +33,7 @@ def game_date(soup):
 def game_date_was_last_night(soup):
 	dt_game = game_date(soup)
 	dt = datetime.today() - timedelta(days=1)
-	return dt.year == dt_game.year and dt.month == dt_game.month and dt.day == dt_game.day 
+	return dt.year == dt_game.year and dt.month == dt_game.month and dt.day == dt_game.day
 
 def get_scores(soup, max_scores, team_prefs):
 	if not game_date_was_last_night(soup):

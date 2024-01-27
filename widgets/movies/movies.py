@@ -83,15 +83,15 @@ def render(item, outfile, max_summary_len=MAX_SUMMARY_LEN):
 		out = '\\textbf{' + item['name'] + '}'
 		if item.get('meta', ''):
 			out += ' ({})'.format(unicode_to_latex(item['meta']))
-		if item.get('director', ''):
-			out += '\n\n' + '\\textit{' + 'Director}: ' + unicode_to_latex(item['director'])
-		if item.get('starring', []):
-			out += '\n\n' + '\\textit{' + 'Starring}: ' + unicode_to_latex(', '.join(item['starring']))
 		if item.get('summary', ''):
 			summ = item['summary']
 			if len(summ) > max_summary_len:
 				summ = summ[:max_summary_len] + '...'
-			out += '\n\n{}'.format(unicode_to_latex(summ))
+			out += ': {}'.format(unicode_to_latex(summ))
+		if item.get('director', ''):
+			out += '. Directed by ' + unicode_to_latex(item['director']) + '.'
+		if item.get('starring', []):
+			out += '. Starring ' + unicode_to_latex(', '.join(item['starring'])) + '.'
 		f.write(out)
 
 def main(outdir=CACHE_DIR, cached=True):

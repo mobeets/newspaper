@@ -23,7 +23,10 @@ class Scraper:
 			self.cache_path = None
 
 		self.content = self.get_content()
-		self.soup = BeautifulSoup(self.content, features="lxml")
+		self.soup = self.parse(self.content)
+
+	def parse(self, content):
+		return BeautifulSoup(content, features="lxml")
 	
 	def is_cached(self):
 		return os.path.exists(self.cache_path)
@@ -31,12 +34,12 @@ class Scraper:
 	def load_cached(self):
 		return open(self.cache_path).read()
 
-	def fetch(self):
+	def fetch(self, url=None, cache_path=None):
 		session = requests.Session()
-		response = session.get(self.url)
+		response = session.get(url)
 		content = response.text
-		if self.update_cache and self.cache_path is not None:
-			with open(self.cache_path, 'w') as f:
+		if cache_path is not None:
+			with open(cache_path, 'w') as f:
 				f.write(content)
 		return content
 
@@ -44,7 +47,7 @@ class Scraper:
 		if self.try_cache and self.is_cached():
 			return self.load_cached()
 		else:
-			return self.fetch()
+			return self.fetch(url=self.url, cache_path=self.cache_path if self.update_cache else None)
 
 if __name__ == '__main__':
 	import sys

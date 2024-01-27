@@ -53,7 +53,11 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True):
 
 	# news: writes .tex
 	try:
+		# sports headlines from AP News
 		news.main(name='sports', outdir=paths['datadir'], cached=cached)
+
+		# new best albums from Pitchfork
+		news.main(name='music', outdir=paths['datadir'], cached=cached)
 	except:
 		pass
 
