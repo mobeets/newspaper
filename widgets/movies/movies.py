@@ -105,7 +105,8 @@ def main(outdir=CACHE_DIR, cached=True):
 	movie = add_movie_info(movie)
 	if movie:
 		render(movie, os.path.join(outdir, 'movie.tex'))
-		update_history(movie)
+		if not cached:
+			update_history(movie)
 
 if __name__ == '__main__':
 	main(cached=True)
