@@ -97,7 +97,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 		pass_or_raise(debug)
 
 	# comics: saves images
-	for comic_name in ['calvinandhobbes', 'pearls']:
+	for comic_name in ['xkcd', 'calvinandhobbes', 'pearls']:
 		try:
 			comics.main(comic_name, outdir=paths['imagedir'], cached=cached)
 		except:
