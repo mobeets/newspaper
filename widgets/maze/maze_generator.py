@@ -155,7 +155,7 @@ def render(outfile, size=9, title=None):
     plotXKCD(m.grid.copy(), start=m.start, end=m.end, outfile=outfile, title=title)
 
 def main(outdir):
-    sizes = [9, 15]
+    sizes = [12, 15]
     names = ['Robin', 'Jordan']
     for name, size in zip(names, sizes):
         fnm = 'maze_{}.png'.format(name[0].lower())

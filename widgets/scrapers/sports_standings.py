@@ -24,7 +24,7 @@ class Standings(Scraper):
 			standings[conf_name] = []
 			for team in teams:
 				name = team.find('a').text.strip()#.split(' ')[0]
-				vals = {'name': name}
+				vals = {'Team': name}
 				for item in team.find_all('td'):
 					keys = [k for k in item.attrs if 'data-' in k]
 					key = item.attrs[keys[0]]
