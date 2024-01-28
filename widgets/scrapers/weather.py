@@ -29,7 +29,7 @@ def plot_time_series(rows, outfile=None, fig=None, yticks=None):
 		plt.figure(figsize=(4,2))
 	xs = np.array([row['dt'].hour for row in rows])
 	ys1 = np.array([row['temp'] for row in rows])
-	ys2 = 100*np.array([row['precip'] for row in rows])
+	ys2 = np.array([row['precip'] for row in rows])
 	ix = np.argsort(xs)
 
 	color = 'blue'
