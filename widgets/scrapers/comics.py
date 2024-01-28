@@ -36,7 +36,7 @@ def render(item, outfile):
 	outfile += item.get('ext', '.png')
 	with open(outfile, 'wb') as f:
 		f.write(item['binary'])
-	if item.get('ext', '.gif'):
+	if outfile.endswith('.gif'):
 		outfile_png = outfile.replace('.gif', '.png')
 		print('Converting {} to {}...'.format(outfile, outfile_png))
 		subprocess.check_output(['convert', outfile, outfile_png])

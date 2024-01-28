@@ -27,11 +27,16 @@ class Pokedex(Scraper):
 		name = self.soup.select('.pokedex-pokemon-pagination-title')[0].text.strip().split()[0]
 		desc = self.soup.select('.version-x')[0].text.strip()
 		img_url = self.soup.select('.profile-images')[0].find('img').attrs['src']
-		return {'name': name, 'desc': desc, 'index': self.poke_index, 'img_url': img_url}
+		kind = self.soup.select('.dtm-type')[0].find('a').text.strip()
+		evols = [x.text.split('\n')[1].strip() for x in self.soup.select('.evolution-profile')[0].find_all('h3')]
+		if len(evols) == 1:
+			evols = []
+		return {'name': name, 'desc': desc, 'index': self.poke_index, 'img_url': img_url, 'kind': kind, 'evols': evols}
 
 	def render(self, item, outfile):
-		out = '\\textbf{' + unicode_to_latex(item['name']) + '}' + ' (\#{})'.format(unicode_to_latex(item['index']))
+		out = 'Pokémon of the day:\n \\textbf{' + unicode_to_latex(item['name']) + '}' + ' (\#{})'.format(unicode_to_latex(item['index'])) + ' [{}]'.format(unicode_to_latex(item['kind']))
 		out += '\n\n' + unicode_to_latex(item['desc'])
+		out += '\n\nEvolutions: {}'.format(' $\\rightarrow$ '.join(x for x in item['evols']))
 		with open(outfile, 'w') as f:
 			f.write(out)
 		return out
