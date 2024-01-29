@@ -92,6 +92,12 @@ def dtstr_to_dt(dtstr):
 def get_time_series(forecast, days_ahead=0):
 	today = datetime.now() + timedelta(days=days_ahead)
 	rows = []
+	if 'properties' not in forecast:
+		print("ERROR: properties not in forecast")
+		return rows
+	if 'periods' not in forecast['properties']:
+		print("ERROR: periods not in forecast properties")
+		return rows
 	for item in forecast['properties']['periods']:
 		dt = dtstr_to_dt(item['startTime'])
 		temp = item['temperature']
