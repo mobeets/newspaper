@@ -39,7 +39,7 @@ def render(item, outfile):
 	if outfile.endswith('.gif'):
 		outfile_png = outfile.replace('.gif', '.png')
 		print('Converting {} to {}...'.format(outfile, outfile_png))
-		subprocess.check_output(['convert', outfile, outfile_png])
+		subprocess.check_output(['/opt/homebrew/bin/convert', outfile, outfile_png])
 		print('Done.')
 
 def is_cached(name, cache_path=CACHE_PATH):

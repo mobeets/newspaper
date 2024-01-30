@@ -74,6 +74,13 @@ def plot_stats_inner(stats, outfile=None, fig=None):
 			if stat['high'] > ymax:
 				ymax = stat['high']
 	plt.xticks(ticks=range(len(stats)), labels=xs, rotation=90)
+
+	# round down/up ymin and ymax to nearest 5 deg
+	ymin = np.floor(ymin/5)*5
+	ymax = np.ceil(ymax/5)*5
+	if ymin < 32 and ymax > 32:
+		plt.plot(plt.xlim(), [32, 32], 'k-', zorder=-1, alpha=0.5, linewidth=1)
+
 	yticks = np.linspace(ymin, ymax, 4).astype(int)
 	plt.yticks(yticks, rotation=0)
 	plt.gca().axes.spines.right.set_visible(False)
@@ -87,7 +94,7 @@ def is_same_day(dt1, dt2):
 	return dt1.year == dt2.year and dt1.month == dt2.month and dt1.day == dt2.day
 
 def dtstr_to_dt(dtstr):
-	return datetime.strptime(dtstr[:13], '%Y-%M-%dT%H')
+	return datetime.strptime(dtstr[:13], '%Y-%m-%dT%H')
 
 def get_time_series(forecast, days_ahead=0):
 	today = datetime.now() + timedelta(days=days_ahead)
@@ -116,14 +123,18 @@ def get_stats(rows):
 		elif row['temp'] > high:
 			high = row['temp']
 		temps.append(row['temp'])
-	return {'low': low, 'high': high, 'mean': np.mean(temps)}
+	if len(temps) == 0:
+		low = np.nan
+		high = np.nan
+	return {'low': low, 'high': high, 'mean': np.mean(temps) if len(temps) > 0 else np.nan}
 
 def plot_stats(weather, outfile=None, fig=None, max_days_ahead=2):
 	stats = {}
 	for city in weather:
 		stats[city] = []
 		for days_ahead in range(max_days_ahead+1):
-			stats[city].append(get_stats(get_time_series(weather[city]['forecast'], days_ahead=days_ahead)))
+			ts = get_time_series(weather[city]['forecast'], days_ahead=days_ahead)
+			stats[city].append(get_stats(ts))
 	plot_stats_inner(stats, outfile=outfile, fig=fig)
 
 def is_cached():
