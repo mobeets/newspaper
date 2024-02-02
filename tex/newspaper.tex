@@ -73,19 +73,21 @@
 \end{minipage}
 
 \headline{Games \& Comics}
-\vspace{-0.3cm}
+\vspace{-0.4cm}
 
 \noindent\begin{minipage}{0.3\linewidth}
 \noindent\includegraphics[width=\linewidth]{images/pokedex.png}
 \end{minipage}
-\begin{minipage}{0.65\linewidth}
+\begin{minipage}{0.74\linewidth}
 \input{data/pokedex.tex}
 \end{minipage}
 
-\center\includegraphics[width=0.95\linewidth]{images/maze_r.png}
+% \center\includegraphics[width=\linewidth]{images/comic-calvinandhobbes.png}
+\center\includegraphics[width=\linewidth]{images/comic-pearls.png}
 
+\center\includegraphics[width=0.95\linewidth]{images/maze_r.png}
 \renewcommand*\sudokuformat[1]{\sffamily#1}
-\setlength\sudokusize{0.98\linewidth}
+\setlength\sudokusize{0.97\linewidth}
 \setlength\sudokuthickline{1pt}
 \begin{center}
 	\input{data/sudoku.tex}
@@ -95,17 +97,6 @@
 % \begin{center}
 % 	\input{data/numberlink.tex}
 % \end{center}
-
-\ifthenelse{\isodd{\today}}
-  {% odd days
-	 \center\includegraphics[width=\linewidth]{images/comic-calvinandhobbes.png}
-  }
-  {% even days
-   \center\includegraphics[width=\linewidth]{images/comic-pearls.png}
-  }
-
-% \center\includegraphics[width=\linewidth]{images/comic-pearls.png}
-% \center\includegraphics[width=\linewidth]{images/comic-calvinandhobbes.png}
 
 \end{multicols}
 
