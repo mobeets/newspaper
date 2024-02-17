@@ -39,8 +39,10 @@ def plot_time_series(rows, outfile=None, fig=None, yticks=None):
 	plt.ylabel('temp. (F)', color=color)
 	plt.xticks(ticks=xs[ix][::2].astype(int), rotation=90)
 	if yticks is None:
-		yticks = np.linspace(ys1[ix].min(), ys1[ix].max(), 4).astype(int)
+		yticks = np.linspace(ys1.min(), ys1.max(), 4).astype(int)
 	plt.yticks(ticks=yticks)
+	if ys1.min() < 32 and ys1.max() > 32:
+		plt.plot(plt.xlim(), [32, 32], 'k-', zorder=-1, alpha=0.5, linewidth=1)
 
 	ax2 = plt.gca().twinx()
 	color = 'orange'
