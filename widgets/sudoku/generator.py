@@ -1,3 +1,4 @@
+import time
 import random
 from functools import reduce
 from board import Board
@@ -67,8 +68,9 @@ class Generator:
                 break
 
     # method attempts to remove a cell and checks that solution is still unique
-    def reduce_via_random(self, cutoff=81):
+    def reduce_via_random(self, cutoff=81, timelimit=None):
         temp = self.board
+        tstart = time.time()
         existing = temp.get_used_cells()
 
         # sorting used cells by density heuristic, highest to lowest
@@ -77,6 +79,9 @@ class Generator:
 
         # for each cell in sorted list
         for cell in elements:
+            if timelimit is not None and time.time() - tstart > timelimit:
+                print("Reached time limit")
+                break
             original = cell.value
 
             # get list of other values to try in its place

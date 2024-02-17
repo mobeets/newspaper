@@ -7,23 +7,25 @@ CUR_DIR = pathlib.Path(__file__).parent.resolve()
 
 # setting difficulties and their cutoffs for each solve method
 difficulties = {
-    'easy': (35, 0), 
-    'medium': (81, 5), 
-    'hard': (81, 10), 
-    'extreme': (81, 15)
+    'simple': (81, 9), 
+    'easy': (81, 11), 
+    'medium': (81, 13), 
+    'tough': (81, 14), 
+    'hard': (81, 15), 
+    'difficult': (81, 16),
+    'extreme': (81, 17)
 }
 
 def render(content, outfile):
-    # header = """Jess's Sudoku\\vspace{0.2cm}\n\n"""
     template = """\\begin{sudoku-block}""" + content + """\n\\end{sudoku-block}"""
     
     if outfile is not None:
         with open(outfile, 'w') as f:
             f.write(template)
     else:
-        print(outfile)
+        print(content)
 
-def main(mode='medium', outdir=None):
+def main(mode='medium', outdir=None, timelimit=20):
     # getting desired difficulty from command line
     difficulty = difficulties[mode]
 
@@ -42,7 +44,9 @@ def main(mode='medium', outdir=None):
     # catching zero case
     if difficulty[1] != 0:
         # applying random reduction with corresponding difficulty cutoff
-        gen.reduce_via_random(difficulty[1])
+        gen.reduce_via_random(difficulty[1], timelimit=timelimit)
+
+    print('Made a', mode, 'sudoku with', len(gen.board.get_used_cells()), 'cells')
 
     # getting copy after reductions are completed
     final = gen.board.copy()
@@ -54,4 +58,5 @@ def main(mode='medium', outdir=None):
     render(content, outfile)
 
 if __name__ == '__main__':
-    main()
+    for mode in difficulties:
+        main(mode=mode)

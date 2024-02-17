@@ -79,8 +79,8 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 
 	# sudoku: writes. tex
 	try:
-		modes = ['medium']*4 + ['hard']*2 + ['extreme']
-		mode = modes[datetime.now().weekday()]
+		modes = list(sudoku_generator.difficulties.keys())
+		mode = modes[datetime.now().weekday() % len(modes)]
 		sudoku_generator.main(mode=mode, outdir=paths['datadir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
