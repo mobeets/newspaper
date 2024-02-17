@@ -15,8 +15,8 @@ RENDERED_DIR = os.path.join(CUR_DIR, 'rendered')
 DEFAULT_TEMPLATE = 'newspaper.tex'
 SUNDAY_TEMPLATE = 'sunday.tex'
 
-DEFAULT_PRINT_CMD = 'lp -o landscape -o ColorModel=Gray'
-SUNDAY_PRINT_CMD = 'lp -o landscape'
+DEFAULT_PRINT_CMD = 'lp -o landscape -o page-ranges=1-2 -o ColorModel=Gray'
+SUNDAY_PRINT_CMD = 'lp -o landscape -o page-ranges=1-2'
 
 LATEX_PATH = '/Library/TeX/texbin/'
 

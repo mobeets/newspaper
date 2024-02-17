@@ -5,6 +5,7 @@
 
 \usepackage{newspaper}
 \usepackage{sudoku}
+\usepackage{logicpuzzle}
 \usepackage{booktabs}
 \usepackage{enumitem}
 \setlist{noitemsep}
@@ -98,9 +99,23 @@
 \begin{center}
 	\input{data/numberlink.tex}
 \end{center}
+
+% Mini (4x4) Sudoku
+\setnormallinewidth{0.3pt}
+\setthicklinewidth{1pt}
+\starbattlesetup{rows=4,columns=4,scale=0.76,fontsize=normalsize}
+\begin{center}
+\begin{starbattle}
+\framepuzzle
+\framearea{black}{\tikzpath{1}{3}{6,6,6,6}}
+\framearea{black}{\tikzpath{3}{1}{8,8,8,8}}
+\input{data/sudoku_mini.tex}
+\end{starbattle}
+\end{center}
+
 \center\includegraphics[width=\linewidth]{images/comic-pearls.png}
 \center\includegraphics[width=\linewidth]{images/comic-calvinandhobbes.png}
-\center\includegraphics[width=0.7\linewidth]{images/comic-xkcd.png}
+\center\includegraphics[height=0.7\linewidth]{images/comic-xkcd.png}
 
 \end{multicols}
 \end{document}

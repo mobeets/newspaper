@@ -12,7 +12,7 @@ sys.path.append(os.path.join(CUR_DIR, 'numberlink'))
 sys.path.append(os.path.join(CUR_DIR, 'scrapers'))
 
 from maze import maze_generator
-from sudoku import sudoku_generator
+from sudoku import sudoku_generator, sudoku_mini
 from numberlink import numberlink_generator
 from scrapers import sports_scores, sports_standings, sports_teaminfo, sports_headlines, weather, comics, pokemon, movies, music
 
@@ -82,6 +82,12 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 		modes = list(sudoku_generator.difficulties.keys())
 		mode = modes[datetime.now().weekday() % len(modes)]
 		sudoku_generator.main(mode=mode, outdir=paths['datadir'])
+	except Exception as error:
+		pass_or_raise(error, debug)
+
+	# mini sudoku: writes .tex
+	try:
+		sudoku_mini.main(outdir=paths['datadir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
 
