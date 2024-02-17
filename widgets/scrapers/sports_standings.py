@@ -37,7 +37,9 @@ class Standings(Scraper):
 	def render(self, sport, standings, outfile=None):
 		if standings:
 			out = '\\textbf{' + '{} Standings'.format(sport) + '}\n\n'
-			for conf in standings:
+			confs = list(standings.keys())[::-1]
+			# reverse order so West comes before East
+			for conf in confs:
 				df = pd.DataFrame(standings[conf])
 				df.index += 1
 				out += '\\textit{' + conf + '}\n'
