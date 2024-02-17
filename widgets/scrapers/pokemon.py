@@ -36,7 +36,8 @@ class Pokedex(Scraper):
 	def render(self, item, outfile):
 		out = 'Pokémon of the day:\n\\textbf{' + unicode_to_latex(item['name']) + '}' + ' (\#{})'.format(unicode_to_latex(item['index'])) + ' [{}].'.format(unicode_to_latex(item['kind']))
 		out += '\n' + unicode_to_latex(item['desc'])
-		out += '\nEvolutions: {}'.format(' $\\rightarrow$ '.join(x for x in item['evols']))
+		if len(item['evols']) > 0:
+			out += '\nEvolutions: {}'.format(' $\\rightarrow$ '.join(x for x in item['evols']))
 		with open(outfile, 'w') as f:
 			f.write(out)
 		return out
