@@ -19,7 +19,8 @@
 \SetPaperName{Thė Daily Hennig}
 \SetHeaderName{The Daily Hennig}
 \SetPaperLocation{Somerville, MA}
-\SetPaperSlogan{``All the News I Feel Like Printing.''}
+\SetPaperSlogan{R: Red coat, purple shoes, pass. side; J: Blue coat, blue shoes, driver side}
+% \SetPaperSlogan{R: Blue coat, mixed shoes, driver side; J: Red coat, mixed shoes, pass. side}
 \SetPaperPrice{\$0.00}
 
 \usepackage{graphicx}
@@ -87,18 +88,6 @@
 \begin{minipage}{0.71\linewidth}
 \input{data/pokedex.tex}
 \end{minipage}
-\center\includegraphics[width=\linewidth]{images/maze_j.png}
-
-\renewcommand*\sudokuformat[1]{\sffamily#1}
-\setlength\sudokusize{0.98\linewidth}
-\setlength\sudokuthickline{1pt}
-\begin{center}
-	\input{data/sudoku.tex}
-\end{center}
-\setlength\sudokuthickline{0.3pt}
-\begin{center}
-	\input{data/numberlink.tex}
-\end{center}
 
 % Mini (4x4) Sudoku
 \setnormallinewidth{0.3pt}
@@ -113,9 +102,22 @@
 \end{starbattle}
 \end{center}
 
+\center\includegraphics[width=\linewidth]{images/maze_j.png}
+
+\renewcommand*\sudokuformat[1]{\sffamily#1}
+\setlength\sudokusize{0.98\linewidth}
+\setlength\sudokuthickline{1pt}
+\begin{center}
+	\input{data/sudoku.tex}
+\end{center}
+\setlength\sudokuthickline{0.3pt}
+\begin{center}
+	\input{data/numberlink.tex}
+\end{center}
+
 \center\includegraphics[width=\linewidth]{images/comic-pearls.png}
 \center\includegraphics[width=\linewidth]{images/comic-calvinandhobbes.png}
-\center\includegraphics[height=0.7\linewidth]{images/comic-xkcd.png}
+\center\includegraphics[height=0.75\linewidth]{images/comic-xkcd.png}
 
 \end{multicols}
 \end{document}
