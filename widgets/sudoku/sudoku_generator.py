@@ -32,8 +32,8 @@ def main(mode='medium', outdir=None, timelimit=20):
     # constructing generator object from puzzle file (space delimited columns, line delimited rows)
     gen = Generator(os.path.join(CUR_DIR, 'base.txt'))
 
-    # applying random transformations to puzzle
-    gen.randomize(500)
+    # apply random transformations to puzzle
+    gen.randomize()
 
     # getting a copy before slots are removed
     initial = gen.board.copy()
@@ -58,5 +58,6 @@ def main(mode='medium', outdir=None, timelimit=20):
     render(content, outfile)
 
 if __name__ == '__main__':
-    for mode in difficulties:
-        main(mode=mode)
+    main(mode='easy')
+    # for mode in difficulties:
+    #     main(mode=mode)

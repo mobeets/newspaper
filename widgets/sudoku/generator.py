@@ -19,19 +19,50 @@ def str_base(val, base, length=None):
 def sample_permutation_index():
     """
     number of 9x9 sudoku transformations:
-        - row swaps: 3 blocks, 6 row permutations = 3*6=18
-        - col swaps: 3 blocks, 6 row permutations = 3*6=18
-        - stack swaps: 6 stack permutations = 6
-        - band swaps: 6 band permutations = 6
-        - so we could do base 6, length 6, where:
-            - entry 1: row index
-            - entry 2: row order
-            - entry 3: col index
-            - entry 4: col order
-            - entry 5: stack order
-            - entry 6: band order
+        - let a "sit" be a base-6 number
+        - row swaps: 6 row permutations per block = 3 sits 
+        - col swaps: 6 col permutations per block = 3 sits 
+        - stack swaps: 6 stack permutations = 1 sit
+        - band swaps: 6 band permutations = 1 sit
+        - so we need 8 sits, where:
+            - entry 0: row order, block-row 1
+            - entry 1: row order, block-row 2
+            - entry 2: row order, block-row 3
+            - entry 3: col order, block-col 1
+            - entry 4: col order, block-col 2
+            - entry 5: col order, block-col 3
+            - entry 6: stack order
+            - entry 7: band order
     """
     return str_base(random.choice(range(6**6)), 6, 6)
+
+def permutation_to_swaps(index):
+    """
+    converts a permutation of 012 into a series of swaps
+
+    0: 012 -> []
+    1: 021 -> [(1,2)]
+    2: 102 -> [(0,1)]
+    3: 210 -> [(0,2)]
+    4: 120 -> [(0,1), (1,2)]
+    5: 201 -> [(0,1), (0,2)]
+    """
+    swaps = []
+    if index == 0:
+        pass
+    elif index == 1:
+        swaps.append((1,2))
+    elif index == 2:
+        swaps.append((0,1))
+    elif index == 3:
+        swaps.append((0,2))
+    elif index == 4:
+        swaps.append((0,1))
+        swaps.append((1,2))
+    elif index == 5:
+        swaps.append((0,1))
+        swaps.append((0,2))
+    return swaps
 
 class Generator:
 
@@ -51,24 +82,51 @@ class Generator:
         # constructing board
         self.board = Board(numbers)
 
-    # function randomizes an existing complete puzzle
-    def randomize(self, iterations):
+    def randomize(self):
         """
-        number of transformations:
-        - row swaps: 3 blocks, 6 row permutations = 3*6=18
-        - col swaps: 3 blocks, 6 row permutations = 3*6=18
-        - stack swaps: 6 stack permutations = 6
-        - band swaps: 6 band permutations = 6
-        - total: 18*18*6*6 = 11664
-        - or could do base 6, length 6
-            - entry 1: row index
-            - entry 2: row order
-            - entry 3: col index
-            - entry 4: col order
-            - entry 5: stack order
-            - entry 6: band order
+        select a random permutation of the current puzzle
         """
+        self.index = sample_permutation_index()
+        self.permute_puzzle_from_index(self.index)
 
+    def permute_puzzle_from_index(self, index):
+        """
+        convert a puzzle permutation index
+        into a series of puzzle permutations
+        """
+        for i, val in enumerate(index):
+            if i == 0: # row order, block-row 0
+                fcn = self.board.swap_row
+                block_index = 0
+            elif i == 1: # row order, block-row 1
+                fcn = self.board.swap_row
+                block_index = 1
+            elif i == 2: # row order, block-row 2
+                fcn = self.board.swap_row
+                block_index = 2
+            elif i == 3: # col order, block-col 0
+                fcn = self.board.swap_column
+                block_index = 0
+            elif i == 4: # col order, block-col 1
+                fcn = self.board.swap_column
+                block_index = 1
+            elif i == 5: # col order, block-col 2
+                fcn = self.board.swap_column
+                block_index = 2
+            elif i == 6: # stack order
+                fcn = self.board.swap_stack
+                block_index = 0
+            elif i == 7: # band order
+                fcn = self.board.swap_band
+                block_index = 0
+
+            v = int(val) # choice
+            swaps = permutation_to_swaps(v) # pieces to swap
+            for pieces in swaps:
+                fcn(3*block_index + pieces[0], 3*block_index + pieces[1])
+
+    # function randomizes an existing complete puzzle
+    def randomize_old(self, iterations):
         # not allowing transformations on a partial puzzle
         if len(self.board.get_used_cells()) == 81:
 
