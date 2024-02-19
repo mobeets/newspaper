@@ -18,8 +18,10 @@ def str_base(val, base, length=None):
 
 def sample_permutation_index():
     """
-    number of 9x9 sudoku transformations:
-        - let a "sit" be a base-6 number
+    gets the index of a random permutation of a 9x9 sudoku
+
+    where number of 9x9 sudoku transformations:
+        - (let a "sit" be a base-6 number)
         - row swaps: 6 row permutations per block = 3 sits 
         - col swaps: 6 col permutations per block = 3 sits 
         - stack swaps: 6 stack permutations = 1 sit
@@ -34,7 +36,10 @@ def sample_permutation_index():
             - entry 6: stack order
             - entry 7: band order
     """
-    return str_base(random.choice(range(6**6)), 6, 6)
+    # sample random int between 0 and 6**8-1
+    index = random.randint(0, (6**8)-1)
+    # write in base-6 with length 8
+    return str_base(index, 6, 8)
 
 def permutation_to_swaps(index):
     """
