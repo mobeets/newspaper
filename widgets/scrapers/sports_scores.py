@@ -19,11 +19,24 @@ class BoxScores(Scraper):
 		score = team.find_all('td')[1].text
 		return {prefix: name, prefix + 'score': score}
 
+	def was_last_night(self, item):
+		try:
+			href = item.find('a')['href']
+			dtstr = href.split('boxscores/')[1][:8]
+			dt = datetime.strptime(dtstr, '%Y%m%d')
+			dttrg = datetime.now() - timedelta(days=1)
+			return dt.year == dttrg.year and dt.month == dttrg.month and dt.day == dttrg.day
+		except:
+			return True
+
 	def get(self, max_scores=MAX_SCORES, team_prefs=TEAM_PREFS):
 		scores = []
 		for item in self.soup.select('.game_summary'):
 			row = self.get_score(item.select('.winner')[0], 'winner')
 			row2 = self.get_score(item.select('.loser')[0], 'loser')
+			keep = self.was_last_night(item.select('.gamelink')[0])
+			if not keep:
+				continue
 			row.update(row2)
 			scores.append(row)
 
@@ -60,5 +73,5 @@ def main(sport, cached=True, outdir=CACHE_DIR):
 	sc.render(sport, scores, outfile=outfile)
 
 if __name__ == '__main__':
-	main(sport='NBA', cached=False)
-	main(sport='NHL', cached=False)
+	main(sport='NBA', cached=True)
+	main(sport='NHL', cached=True)
