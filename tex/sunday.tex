@@ -26,15 +26,11 @@
 \usepackage{graphicx}
 \usepackage{multicol}
 \usepackage{picinpar}
-\usepackage{newspaper-mod} % modifies newspaper style
 \usepackage{ifthen}
 
 \setlength\textwidth{9.5in}		% article default = 418pt
 \setlength\textheight{7.0in}		% article default = 296pt
 \setlength{\tabcolsep}{0.15em} % for horiz spacing in tables
-
-\renewcommand\headline[1]{\begin{center} {\huge \textsl{ #1}}\\ %
-			\rule[5pt]{0.8\hsize}{0.5pt}\\ \end{center}}
 
 %%%%%%%%%  Front matter   %%%%%%%%%%
 \begin{document}
@@ -43,7 +39,7 @@
 \begin{multicols}{3}
 
 \headline{Weather}
-\vspace{-0.5cm}\includegraphics[width=\linewidth]{images/weather.png}
+\vspace{-0.3cm}\includegraphics[width=\linewidth]{images/weather.png}
 
 % \columnbreak
 \headline{Arts \& Culture}

@@ -50,7 +50,7 @@ def render_tex(paths):
 	content = content.replace('\currentissue{1}', '\currentissue{{{}}}'.format(paths['issue_number']))
 
 	# update coat/shoe/seat assignments
-	if paths['issue_number'] % 2 == 1:
+	if paths['issue_number'] % 2 == 0:
 		# on even days, this uncomments the second line
 		content = content.replace('%\SetPaperSlogan', '\SetPaperSlogan')
 

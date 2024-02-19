@@ -25,6 +25,10 @@
 \RequirePackage{yfonts}  % used for the paper title font
 \RequirePackage{datenumber}
 
+\RequirePackage{newtxtext}
+\RequirePackage{newtxmath}
+\RequirePackage{etoolbox}
+
 %******		main code *****
 
 %define font for page title
@@ -44,9 +48,9 @@
 %%%% counters for volume and number %%%%
 
 \newcounter{volume}
-\newcommand\currentvolume[1]{\setcounter{volume}{#1}}
+\newcommand{\currentvolume}[1]{\setcounter{volume}{#1}}
 \newcounter{issue}
-\newcommand\currentissue[1]{\setcounter{issue}{#1}}
+\newcommand{\currentissue}[1]{\setcounter{issue}{#1}}
 
 %%%% set internal variables %%%%
 
@@ -56,15 +60,15 @@
 \def\@paperslogan{``All the News I Feel Like Printing.''}
 \def\@paperprice{Zero Dollars}
 
-\newcommand\SetPaperName[1]{%
+\newcommand{\SetPaperName}[1]{%
 	\def\@papername{#1}}
-\newcommand\SetHeaderName[1]{%
+\newcommand{\SetHeaderName}[1]{%
 	\def\@headername{#1}}
-\newcommand\SetPaperLocation[1]{%
+\newcommand{\SetPaperLocation}[1]{%
 	\def\@paperlocation{#1}}
-\newcommand\SetPaperSlogan[1]{%
+\newcommand{\SetPaperSlogan}[1]{%
 	\def\@paperslogan{#1}}
-\newcommand\SetPaperPrice[1]{%
+\newcommand{\SetPaperPrice}[1]{%
 	\def\@paperprice{#1}}
 
 
@@ -98,14 +102,20 @@
 
 %%%%%%%%%%%  Headline (with byline) command  %%%%%%%%%
 
-\newcommand\headline[1]{\begin{center} #1\\ %
-			\rule[3pt]{0.4\hsize}{0.5pt}\\ \end{center} \par}
-\newcommand\byline[2]{\begin{center} #1 \\%
-			{\footnotesize\bf \MakeUppercase{#2}} \\ %
-			\rule[3pt]{0.4\hsize}{0.5pt}\\ \end{center} \par}
-\newcommand\closearticle{{\begin{center}\rule[6pt]{\hsize}{1pt}\vspace*{-16pt}
-			\rule{\hsize}{0.5pt}\end{center}}}
+\newcommand{\headlinestyle}[1]{{\itshape\LARGE #1}}
+\newcommand{\headline}[1]{\begin{center}\headlinestyle{#1} \\ \rule[3pt]{0.4\hsize}{0.5pt} \\ \end{center}}
 
+% \patchcmd{\byline}{#1}{\bylinestyle #1}{}{}
+
+% \newcommand\headline[1]{\begin{center} #1\\ %
+% 			\rule[3pt]{0.4\hsize}{0.5pt}\\ \end{center} \par}
+% \newcommand{\headline}[1]{ \begin{center} {\textsl\small #1}\\ %
+% 			\rule[3pt]{0.8\hsize}{0.5pt}\\ \end{center} }
+% \newcommand\byline[2]{\begin{center} #1 \\%
+% 			{\footnotesize\bf \MakeUppercase{#2}} \\ %
+% 			\rule[3pt]{0.4\hsize}{0.5pt}\\ \end{center} \par}
+% \newcommand\closearticle{{\begin{center}\rule[6pt]{\hsize}{1pt}\vspace*{-16pt}
+% 			\rule{\hsize}{0.5pt}\end{center}}}
 
 
 %%%%%%%%%%%%%%%%%%%% End of Package   %%%%%%%%%%%%%%%
