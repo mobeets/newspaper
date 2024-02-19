@@ -14,7 +14,7 @@ CACHE_PATH = os.path.join(CACHE_DIR, 'movie_list.html')
 
 MAX_SUMMARY_LEN = 200
 
-BASE_URL = 'https://www.rottentomatoes.com/browse/movies_at_home/affiliates:amazon_prime,apple_tv_plus,disney_plus,max_us,netflix~sort:newest'
+BASE_URL = 'https://www.rottentomatoes.com/browse/movies_at_home/affiliates:amazon_prime,apple_tv_plus,disney_plus,max_us,netflix~sort:audience_highest'
 BASE_MOVIE_URL = 'https://www.rottentomatoes.com'
 
 def update_history(new_movie, history_path=HISTORY_PATH):

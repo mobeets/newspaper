@@ -4,6 +4,35 @@ from functools import reduce
 from board import Board
 from solver import Solver
 
+def str_base(val, base, length=None):
+    """
+    converts val (int, base 10) to new base
+    """
+    res = ''
+    while val > 0:
+        res = str(val % base) + res
+        val //= base # for getting integer division
+    if res:
+        return res if length is None else res.zfill(length)
+    return '0' if length is None else '0'.zfill(length)
+
+def sample_permutation_index():
+    """
+    number of 9x9 sudoku transformations:
+        - row swaps: 3 blocks, 6 row permutations = 3*6=18
+        - col swaps: 3 blocks, 6 row permutations = 3*6=18
+        - stack swaps: 6 stack permutations = 6
+        - band swaps: 6 band permutations = 6
+        - so we could do base 6, length 6, where:
+            - entry 1: row index
+            - entry 2: row order
+            - entry 3: col index
+            - entry 4: col order
+            - entry 5: stack order
+            - entry 6: band order
+    """
+    return str_base(random.choice(range(6**6)), 6, 6)
+
 class Generator:
 
     # constructor for generator, reads in a space delimited
@@ -24,6 +53,21 @@ class Generator:
 
     # function randomizes an existing complete puzzle
     def randomize(self, iterations):
+        """
+        number of transformations:
+        - row swaps: 3 blocks, 6 row permutations = 3*6=18
+        - col swaps: 3 blocks, 6 row permutations = 3*6=18
+        - stack swaps: 6 stack permutations = 6
+        - band swaps: 6 band permutations = 6
+        - total: 18*18*6*6 = 11664
+        - or could do base 6, length 6
+            - entry 1: row index
+            - entry 2: row order
+            - entry 3: col index
+            - entry 4: col order
+            - entry 5: stack order
+            - entry 6: band order
+        """
 
         # not allowing transformations on a partial puzzle
         if len(self.board.get_used_cells()) == 81:
@@ -32,7 +76,7 @@ class Generator:
             for x in range(0, iterations):
 
                 # to get a random column/row
-                case = random.randint(0, 4)
+                case = random.randint(0, 3)
 
                 # to get a random band/stack
                 block = random.randint(0, 2) * 3

@@ -7,11 +7,11 @@ CUR_DIR = pathlib.Path(__file__).parent.resolve()
 
 # setting difficulties and their cutoffs for each solve method
 difficulties = {
-    'simple': (81, 9), 
-    'easy': (81, 11), 
-    'medium': (81, 13), 
-    'tough': (81, 14), 
-    'hard': (81, 15), 
+    'simple': (81, 9),
+    'easy': (81, 11),
+    'medium': (81, 13),
+    'tough': (81, 14),
+    'hard': (81, 15),
     'difficult': (81, 16),
     'extreme': (81, 17)
 }
@@ -32,8 +32,8 @@ def main(mode='medium', outdir=None, timelimit=20):
     # constructing generator object from puzzle file (space delimited columns, line delimited rows)
     gen = Generator(os.path.join(CUR_DIR, 'base.txt'))
 
-    # applying 100 random transformations to puzzle
-    gen.randomize(100)
+    # applying random transformations to puzzle
+    gen.randomize(500)
 
     # getting a copy before slots are removed
     initial = gen.board.copy()
