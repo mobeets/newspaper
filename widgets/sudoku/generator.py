@@ -175,7 +175,7 @@ class Generator:
                 break
 
     # method attempts to remove a cell and checks that solution is still unique
-    def reduce_via_random(self, cutoff=81, timelimit=None):
+    def reduce_via_random(self, cutoff=81, timelimit=None, num_given=None):
         temp = self.board
         tstart = time.time()
         existing = temp.get_used_cells()
@@ -188,6 +188,8 @@ class Generator:
         for cell in elements:
             if timelimit is not None and time.time() - tstart > timelimit:
                 print("Reached time limit")
+                break
+            if num_given is not None and len(self.board.get_used_cells()) <= num_given:
                 break
             original = cell.value
 

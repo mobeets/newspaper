@@ -5,16 +5,29 @@ import pathlib
 from generator import Generator
 CUR_DIR = pathlib.Path(__file__).parent.resolve()
 
-# setting difficulties and their cutoffs for each solve method
-difficulties = {
-    'simple': (81, 9),
-    'easy': (81, 11),
-    'medium': (81, 13),
-    'tough': (81, 14),
-    'hard': (81, 15),
-    'difficult': (81, 16),
-    'extreme': (81, 17)
-}
+new_mode = True
+
+if new_mode:
+    # number of givens
+    difficulties = {
+        'simple': 31,
+        'easy': 30,
+        'medium': 29,
+        'tough': 28,
+        'hard': 27,
+        'difficult': 26,
+        'extreme': 25
+    }
+else:
+    difficulties = {
+        'simple': (81, 9),
+        'easy': (81, 11),
+        'medium': (81, 13),
+        'tough': (81, 14),
+        'hard': (81, 15),
+        'difficult': (81, 16),
+        'extreme': (81, 0)
+    }
 
 def render(content, outfile):
     template = """\\begin{sudoku-block}""" + content + """\n\\end{sudoku-block}"""
@@ -39,11 +52,15 @@ def main(mode='medium', outdir=None, timelimit=20):
     initial = gen.board.copy()
 
     # applying logical reduction with corresponding difficulty cutoff
-    gen.reduce_via_logical(difficulty[0])
-
-    # catching zero case
-    if difficulty[1] != 0:
-        # applying random reduction with corresponding difficulty cutoff
+    if new_mode:
+        gen.reduce_via_logical(81)
+    else:
+        gen.reduce_via_logical(difficulty[0])
+    
+    # applying random reduction with corresponding difficulty cutoff
+    if new_mode:
+        gen.reduce_via_random(81, timelimit=timelimit, num_given=difficulty)
+    else:
         gen.reduce_via_random(difficulty[1], timelimit=timelimit)
 
     print('Made a', mode, 'sudoku with', len(gen.board.get_used_cells()), 'cells')
@@ -58,6 +75,5 @@ def main(mode='medium', outdir=None, timelimit=20):
     render(content, outfile)
 
 if __name__ == '__main__':
-    main(mode='easy')
-    # for mode in difficulties:
-    #     main(mode=mode)
+    for mode in difficulties:
+        main(mode=mode)
