@@ -3,6 +3,7 @@ import random
 from functools import reduce
 from board import Board
 from solver import Solver
+from gen import gen_sudoku
 
 def str_base(val, base, length=None):
     """
@@ -70,19 +71,18 @@ def permutation_to_swaps(index):
     return swaps
 
 class Generator:
-
     # constructor for generator, reads in a space delimited
-    def __init__(self, starting_file):
+    def __init__(self, starting_file=None):
 
-        # opening file
-        f = open(starting_file)
-
-        # reducing file to a list of numbers
-        numbers = filter(lambda x: x in '123456789', list(reduce(lambda x, y: x + y, f.readlines())))
-        numbers = list(map(int, numbers))
-
-        # closing file
-        f.close()
+        if starting_file is not None:
+            # opening filled puzzle from file
+            with open(starting_file) as f:
+                # reducing file to a list of numbers
+                numbers = filter(lambda x: x in '123456789', list(reduce(lambda x, y: x + y, f.readlines())))
+                numbers = list(map(int, numbers))
+        else:
+            numbers = gen_sudoku(9)
+            numbers = [x for xs in numbers for x in xs] # flatten
 
         # constructing board
         self.board = Board(numbers)

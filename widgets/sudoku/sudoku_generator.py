@@ -1,9 +1,11 @@
 # !/usr/bin/python
 import sys
 import os.path
+import glob
+import random
 import pathlib
 from generator import Generator
-CUR_DIR = pathlib.Path(__file__).parent.resolve()
+PUZZLE_DIR = os.path.join(pathlib.Path(__file__).parent.resolve(), 'puzzles')
 
 new_mode = True
 
@@ -29,6 +31,9 @@ else:
         'extreme': (81, 0)
     }
 
+def get_random_puzzle_path(puzzle_dir=PUZZLE_DIR):
+    return random.choice(glob.glob(os.path.join(puzzle_dir, '*.txt')))
+
 def render(content, outfile):
     template = """\\begin{sudoku-block}""" + content + """\n\\end{sudoku-block}"""
     
@@ -43,7 +48,10 @@ def main(mode='medium', outdir=None, timelimit=20):
     difficulty = difficulties[mode]
 
     # constructing generator object from puzzle file (space delimited columns, line delimited rows)
-    gen = Generator(os.path.join(CUR_DIR, 'base.txt'))
+    puzzle_path = get_random_puzzle_path()
+    # puzzle_path = os.path.join(PUZZLE_DIR, '2.txt')
+    print(f'Loading puzzle template: {puzzle_path}')
+    gen = Generator(puzzle_path)
 
     # apply random transformations to puzzle
     gen.randomize()

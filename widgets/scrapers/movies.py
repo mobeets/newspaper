@@ -79,7 +79,7 @@ def render(item, outfile, max_summary_len=MAX_SUMMARY_LEN):
 	with open(outfile, 'w') as f:
 		if not item.get('name', ''):
 			return
-		out = '\\textbf{' + item['name'] + '}'
+		out = '\\textbf{' + unicode_to_latex(item['name']) + '}'
 		if item.get('meta', ''):
 			out += ' ({})'.format(unicode_to_latex(item['meta']))
 		if item.get('summary', ''):
