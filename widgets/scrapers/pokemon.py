@@ -4,7 +4,7 @@ import pathlib
 import random
 import requests
 from datetime import datetime, timedelta
-from pylatexenc.latexencode import unicode_to_latex
+from pylatexenc.latexencode import UnicodeToLatexEncoder
 from base import Scraper, CACHE_DIR
 
 BASE_URL = 'https://www.pokemon.com/us/pokedex/{}'
@@ -34,10 +34,11 @@ class Pokedex(Scraper):
 		return {'name': name, 'desc': desc, 'index': self.poke_index, 'img_url': img_url, 'kind': kind, 'evols': evols}
 
 	def render(self, item, outfile):
-		out = 'Pokémon of the day:\n\\textbf{' + unicode_to_latex(item['name']) + '}' + ' (\#{})'.format(unicode_to_latex(item['index'])) + ' [{}].'.format(unicode_to_latex(item['kind']))
-		out += '\n' + unicode_to_latex(item['desc'])
+		u = UnicodeToLatexEncoder(unknown_char_policy='replace')
+		out = 'Pokémon of the day:\n\\textbf{' + u.unicode_to_latex(item['name']) + '}' + ' (\#{})'.format(u.unicode_to_latex(item['index'])) + ' [{}].'.format(u.unicode_to_latex(item['kind']))
+		out += '\n' + u.unicode_to_latex(item['desc'])
 		if len(item['evols']) > 0:
-			out += '\nEvolutions: {}'.format(' $\\rightarrow$ '.join(x for x in item['evols']))
+			out += '\nEvolutions: {}'.format(' $\\rightarrow$ '.join(u.unicode_to_latex(x) for x in item['evols']))
 		with open(outfile, 'w') as f:
 			f.write(out)
 		return out

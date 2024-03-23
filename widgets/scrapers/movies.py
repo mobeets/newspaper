@@ -74,10 +74,9 @@ def add_movie_info(item):
 	return item
 
 def render(item, outfile, max_summary_len=MAX_SUMMARY_LEN):
-	if not item:
-		return
 	with open(outfile, 'w') as f:
 		if not item.get('name', ''):
+			f.write('No new movies today.')
 			return
 		out = '\\textbf{' + unicode_to_latex(item['name']) + '}'
 		if item.get('meta', ''):
@@ -102,10 +101,9 @@ def main(outdir=CACHE_DIR, cached=True):
 	movie_list = get_movie_list(soup)
 	movie = pick_movie(movie_list)
 	movie = add_movie_info(movie)
-	if movie:
-		render(movie, os.path.join(outdir, 'movie.tex'))
-		if not cached:
-			update_history(movie)
+	render(movie, os.path.join(outdir, 'movie.tex'))
+	if movie and not cached:
+		update_history(movie)
 
 if __name__ == '__main__':
 	main(cached=True)
