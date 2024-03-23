@@ -1,6 +1,7 @@
 import os.path
 import pathlib
 import json
+import random
 import requests
 import subprocess
 import pandas as pd
@@ -33,7 +34,10 @@ def pick_movie(movie_list):
 	for item in movie_list:
 		if item.get('name', '') not in prev_movies:
 			return item
-	return {}
+	# if we got here, we found no new movies;
+	# so we pick a random one
+	print('Picking a random movie since there are no new ones.')
+	return random.choice(movie_list)
 
 def is_cached(cache_path=CACHE_PATH):
 	return os.path.exists(cache_path)
