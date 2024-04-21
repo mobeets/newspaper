@@ -69,9 +69,18 @@ def add_movie_info(item):
 	content = fetch(item['movie_url'], save_cache=False)
 	soup = BeautifulSoup(content, features="lxml")
 
-	item['meta'] = soup.select('.info')[0].text
-	item['summary'] = [x for x in soup.find_all('p') if x.attrs.get('data-qa', '') == 'movie-info-synopsis'][0].text.strip()
-	item['director'] = [x for x in soup.select('.info-item-label') if 'Director' in x.text][0].parent.find('a').text.strip()
+	# item['meta'] = soup.select('.info')[0].text
+	genre = [x for x in soup.select('rt-text') if x.attrs.get('slot','') == 'genre'][0].text.strip()
+	duration = [x for x in soup.select('rt-text') if x.attrs.get('slot','') == 'duration'][0].text.strip()
+	item['meta'] = '{},{}'.format(genre, duration.replace('.', ''))
+
+	# item['summary'] = [x for x in soup.find_all('p') if x.attrs.get('data-qa', '') == 'movie-info-synopsis'][0].text.strip()
+	# item['summary'] = [x for x in soup.select('rt-text') if x.attrs.get('slot','') == 'content'][0].text.strip()
+	item['summary'] = soup.select('.synopsis-wrap')[0].select('rt-text')[1].text.strip()
+
+	# item['director'] = [x for x in soup.select('.info-item-label') if 'Director' in x.text][0].parent.find('a').text.strip()
+	item['director'] = soup.select('.category-wrap')[0].select('rt-link')[0].text.strip()
+	
 	item['starring'] = []
 	for name in soup.select('.cast-and-crew-item')[:2]:
 		item['starring'].append(name.find('p').text.strip())

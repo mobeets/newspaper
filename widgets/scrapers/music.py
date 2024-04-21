@@ -10,17 +10,25 @@ BASE_URLS = {'music': 'https://pitchfork.com/reviews/best/albums/'}
 class PitchforkReview(Scraper):
 	def is_new(self, item):
 		today = datetime.now() - timedelta(days=1)
-		dtstr = item.select('.pub-date')[0].text
-		dt = datetime.strptime(dtstr, '%B %d %Y')
-		return dt.year == today.year and dt.month == today.month and dt.day == today.day
+		# dtstr = item.select('.pub-date')[0].text
+		# dt = datetime.strptime(dtstr, '%B %d %Y')
+		dtstr = item.select('time')[0].text
+		dt = datetime.strptime(dtstr, '%B %d, %Y')
+		return dt.year == today.year and dt.month == today.month and dt.day == today.day-8
 
 	def get(self):
-		item = self.soup.select('.review')[0]
+		# item = self.soup.select('.review')[0]
+		item = self.soup.select('.summary-item')[0]
 		if not self.is_new(item):
 			return {}
-		artist = item.select('.review__title-artist')[0].text.strip()
-		album = item.select('.review__title-album')[0].text.strip()
-		genre = item.select('.genre-list__item')[0].text.strip()
+		
+		# artist = item.select('.review__title-artist')[0].text.strip()
+		# album = item.select('.review__title-album')[0].text.strip()
+		# genre = item.select('.genre-list__item')[0].text.strip()
+
+		artist = item.select('.summary-item__sub-hed')[0].text.strip()
+		album = item.select('.summary-item__hed')[0].text.strip()
+		genre = genre = item.select('.summary-item__rubric')[0].text.strip()
 		url = 'https://pitchfork.com' + item.find('a').attrs['href']
 
 		content = self.fetch(url)

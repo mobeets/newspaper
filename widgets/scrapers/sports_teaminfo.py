@@ -15,8 +15,12 @@ class TeamInfo(Scraper):
 	def get(self):
 		info = []
 		for tag in ['Record', 'Next Game']:
-			item = [x for x in self.soup.find_all('strong') if tag in x.text][0].parent.text.strip()
-			out = ' '.join(item.split())
+			items = [x for x in self.soup.find_all('strong') if tag in x.text]
+			if len(items) > 0:
+				item = [x for x in self.soup.find_all('strong') if tag in x.text][0].parent.text.strip()
+				out = ' '.join(item.split())
+			else:
+				out = ''
 			if 'Record' in out:
 				out = out.split('Division')[0]
 			info.append(out)

@@ -30,6 +30,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 	## WEATHER
 	
 	# weather: saves two images
+	print('WEATHER')
 	try:
 		weather.main(outdir=paths['imagedir'], cached=cached)
 	except Exception as error:
@@ -38,19 +39,21 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 	## ARTS AND CULTURE
 
 	# movies: writes .tex
+	print('MOVIES')
 	try:
 		movies.main(outdir=paths['datadir'], cached=cached)
 	except Exception as error:
 		pass_or_raise(error, debug)
 	
 	# new best albums from Pitchfork (writes .tex)
+	print('MUSIC')
 	try:
 		music.main(outdir=paths['datadir'], cached=cached)
 	except Exception as error:
 		pass_or_raise(error, debug)
 
 	## SPORTS SECTION
-
+	print('SPORTS HEADLINES')
 	# sports headlines from AP News (writes .tex)
 	try:
 		sports_headlines.main(outdir=paths['datadir'], cached=cached)
@@ -58,6 +61,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 		pass_or_raise(error, debug)
 
 	# sports scores/standings: writes .tex
+	print('SPORTS SCORES')
 	for sport_name in ['NBA', 'NHL']:
 		try:
 			sports_scores.main(sport_name, outdir=paths['datadir'], cached=cached)
@@ -69,6 +73,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 			pass_or_raise(error, debug)
 
 	# sports team info
+	print('SPORTS TEAMS')
 	for team_name in ['Dallas Mavericks', 'Boston Bruins']:
 		try:
 			sports_teaminfo.main(team_name, outdir=paths['datadir'], cached=cached)
@@ -76,7 +81,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 			pass_or_raise(error, debug)
 
 	## GAMES AND COMICS
-
+	print('SUDOKU')
 	# sudoku: writes. tex
 	try:
 		modes = list(sudoku_generator.difficulties.keys())
@@ -86,24 +91,28 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 		pass_or_raise(error, debug)
 
 	# mini sudoku: writes .tex
+	print('SUDOKU MINI')
 	try:
 		sudoku_mini.main(outdir=paths['datadir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
 
 	# numberlink: writes. tex
+	print('NUMBERLINK')
 	try:
 		numberlink_generator.main(w=9, h=9, outdir=paths['datadir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
 
 	# maze: saves two images
+	print('MAZE')
 	try:
 		maze_generator.main(outdir=paths['imagedir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
 
 	# comics: saves images
+	print('COMICS')
 	for comic_name in ['xkcd', 'calvinandhobbes', 'pearls']:
 		try:
 			comics.main(comic_name, outdir=paths['imagedir'], cached=cached)
@@ -112,6 +121,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 	time.sleep(3) # wait for comics to finish
 	
 	# new pokemon (writes .tex and saves .png)
+	print('POKEMON')
 	try:
 		pokemon.main(outdir=paths['imagedir'], datadir=paths['datadir'], cached=cached)
 	except Exception as error:
