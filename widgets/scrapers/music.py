@@ -14,7 +14,7 @@ class PitchforkReview(Scraper):
 		# dt = datetime.strptime(dtstr, '%B %d %Y')
 		dtstr = item.select('time')[0].text
 		dt = datetime.strptime(dtstr, '%B %d, %Y')
-		return dt.year == today.year and dt.month == today.month and dt.day == today.day-8
+		return dt.year == today.year and dt.month == today.month and dt.day == today.day
 
 	def get(self):
 		# item = self.soup.select('.review')[0]
