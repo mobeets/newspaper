@@ -106,9 +106,14 @@
 \begin{center}
 	\input{data/sudoku.tex}
 \end{center}
-\setlength\sudokuthickline{0.3pt}
+\setnormallinewidth{0.3pt}
+\setthicklinewidth{1pt}
+\starbattlesetup{rows=9,columns=9,scale=0.76,fontsize=normalsize}
 \begin{center}
-	\input{data/numberlink.tex}
+\begin{starbattle}
+\framepuzzle
+\input{data/numberlink.tex}
+\end{starbattle}
 \end{center}
 
 \center\includegraphics[width=\linewidth]{images/comic-pearls.png}

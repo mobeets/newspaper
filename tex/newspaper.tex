@@ -5,6 +5,7 @@
 
 \usepackage{newspaper}
 \usepackage{sudoku}
+\usepackage{logicpuzzle}
 \usepackage{booktabs}
 \usepackage{enumitem}
 \setlist{noitemsep}
@@ -83,7 +84,18 @@
 % \center\includegraphics[width=\linewidth]{images/comic-calvinandhobbes.png}
 \center\includegraphics[width=\linewidth]{images/comic-pearls.png}
 
-\center\includegraphics[width=0.95\linewidth]{images/maze_r.png}
+% \center\includegraphics[width=0.95\linewidth]{images/maze_r.png}
+% Mini (5x5) numberlink
+\setnormallinewidth{0.3pt}
+\setthicklinewidth{1pt}
+\starbattlesetup{rows=6,columns=6,scale=0.76,fontsize=normalsize}
+\begin{center}
+\begin{starbattle}
+\framepuzzle
+\input{data/numberlink_small.tex}
+\end{starbattle}
+\end{center}
+
 \renewcommand*\sudokuformat[1]{\sffamily#1}
 \setlength\sudokusize{0.97\linewidth}
 \setlength\sudokuthickline{1pt}

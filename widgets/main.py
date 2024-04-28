@@ -100,7 +100,14 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 	# numberlink: writes. tex
 	print('NUMBERLINK')
 	try:
-		numberlink_generator.main(w=9, h=9, outdir=paths['datadir'])
+		numberlink_generator.main(w=9, h=9, fnm='numberlink', outdir=paths['datadir'])
+	except Exception as error:
+		pass_or_raise(error, debug)
+
+	# numberlink: writes. tex
+	print('NUMBERLINK - SMALL')
+	try:
+		numberlink_generator.main(w=6, h=6, fnm='numberlink_small', outdir=paths['datadir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
 

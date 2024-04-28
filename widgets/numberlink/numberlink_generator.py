@@ -127,7 +127,7 @@ def make(w, h, mitm, min_numbers=0, max_numbers=1000):
         # print(grid)
         # print(f'Gave up after {tries} tries')
 
-def render(grid, color_grid):
+def render_old(grid, color_grid):
     out = ''
     out += '\\begin{sudoku-block}\n'
     for y in range(color_grid.h):
@@ -142,7 +142,27 @@ def render(grid, color_grid):
     out += '\\end{sudoku-block}'
     return out
 
-def main(w=9, h=9, outdir=None, no_colors=True):
+# \starbattlecell{1}{2}{4}
+# \starbattlecell{1}{4}{1}
+# \starbattlecell{2}{1}{1}
+# \starbattlecell{2}{3}{3}
+# \starbattlecell{3}{2}{1}
+# \starbattlecell{3}{4}{3}
+# \starbattlecell{4}{1}{4}
+# \starbattlecell{4}{3}{1}
+
+def render(grid, color_grid):
+    template = '\starbattlecell{{{}}}{{{}}}{{{}}}\n'
+
+    out = ''
+    for y in range(color_grid.h):
+        for x in range(color_grid.w):
+            if grid[x, y] in 'v^<>':
+                val = color_grid[x, y]
+                out += template.format(x+1,y+1, val)
+    return out
+
+def main(w=9, h=9, fnm='numberlink', outdir=None, no_colors=True):
 
     # w, h = args.width, args.height
     if w < 4 or h < 4:
@@ -169,7 +189,7 @@ def main(w=9, h=9, outdir=None, no_colors=True):
     if outdir is None:
         print(out)
     else:
-        with open(os.path.join(outdir, 'numberlink.tex'), 'w') as f:
+        with open(os.path.join(outdir, fnm + '.tex'), 'w') as f:
             f.write(out)
 
 if __name__ == '__main__':

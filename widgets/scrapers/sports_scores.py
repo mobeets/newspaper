@@ -73,5 +73,5 @@ def main(sport, cached=True, outdir=CACHE_DIR):
 	sc.render(sport, scores, outfile=outfile)
 
 if __name__ == '__main__':
-	main(sport='NBA', cached=True)
-	main(sport='NHL', cached=True)
+	main(sport='NBA', cached=False)
+	main(sport='NHL', cached=False)

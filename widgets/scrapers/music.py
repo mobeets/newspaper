@@ -2,8 +2,11 @@ import sys
 import os.path
 import pathlib
 from datetime import datetime, timedelta
-from pylatexenc.latexencode import unicode_to_latex
+from pylatexenc.latexencode import unicode_to_latex, UnicodeToLatexEncoder
 from base import Scraper, CACHE_DIR
+
+u = UnicodeToLatexEncoder(unknown_char_policy='ignore')
+unicode_to_latex = lambda x: u.unicode_to_latex(x)
 
 BASE_URLS = {'music': 'https://pitchfork.com/reviews/best/albums/'}
 
@@ -58,4 +61,4 @@ def main(name='music', cached=True, outdir=CACHE_DIR):
 	outfile = sc.render(review, outfile)
 
 if __name__ == '__main__':
-	main()
+	main(cached=True)
