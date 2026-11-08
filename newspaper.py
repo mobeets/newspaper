@@ -47,12 +47,12 @@ def render_tex(paths):
 		content = f.read()
 
 	# update issue number
-	content = content.replace('\currentissue{1}', '\currentissue{{{}}}'.format(paths['issue_number']))
+	content = content.replace('\\currentissue{1}', '\\currentissue{{{}}}'.format(paths['issue_number']))
 
 	# update coat/shoe/seat assignments
 	if paths['issue_number'] % 2 == 1:
 		# on odd days, this uncomments the second line
-		content = content.replace('%\SetPaperSlogan', '\SetPaperSlogan')
+		content = content.replace('%\\SetPaperSlogan', '\\SetPaperSlogan')
 
 	# write new tex
 	with open(paths['texpath'], 'w') as f:

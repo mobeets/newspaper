@@ -81,22 +81,14 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 			pass_or_raise(error, debug)
 
 	## GAMES AND COMICS
-	print('SUDOKU - NYTIMES')
+	print('SUDOKU')
 	# sudoku: writes. tex
 	try:
-		modes = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard', 'hard']
+		modes = list(sudoku_generator.difficulties.keys())
 		mode = modes[datetime.now().weekday() % len(modes)]
-		sudoku.main(mode, outdir=paths['datadir'], cached=cached)
+		sudoku_generator.main(mode=mode, outdir=paths['datadir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
-		print('SUDOKU')
-		# sudoku: writes. tex
-		try:
-			modes = list(sudoku_generator.difficulties.keys())
-			mode = modes[datetime.now().weekday() % len(modes)]
-			sudoku_generator.main(mode=mode, outdir=paths['datadir'])
-		except Exception as error:
-			pass_or_raise(error, debug)
 
 	# mini sudoku: writes .tex
 	print('SUDOKU MINI')

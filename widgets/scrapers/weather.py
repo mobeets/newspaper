@@ -17,11 +17,11 @@ mpl.rcParams['axes.spines.top'] = False
 CACHE_PATH = os.path.join(CACHE_DIR, 'weather.json')
 BASE_URL = 'https://api.weather.gov/points/{lat},{lon}'
 COORDINATES = {
+	'Houston': [29.7604, -95.3698],
+	'Dallas': [32.9884109, -96.844696],
+	'Austin': [30.2672, -97.7431],
 	'Somerville': [42.39, -71.0868],
 	'Pittsburgh': [40.4406, -79.9959],
-	'Dallas': [32.9884109, -96.844696],
-	'Houston': [29.7604, -95.3698],
-	'Austin': [30.2672, -97.7431],
 	}
 
 def plot_time_series(rows, outfile=None, fig=None, yticks=None):
