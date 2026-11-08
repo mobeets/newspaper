@@ -14,7 +14,7 @@ sys.path.append(os.path.join(CUR_DIR, 'scrapers'))
 from maze import maze_generator
 from sudoku import sudoku_generator, sudoku_mini
 from numberlink import numberlink_generator
-from scrapers import sports_scores, sports_standings, sports_teaminfo, sports_headlines, weather, comics, pokemon, movies, music, sudoku
+from scrapers import sports_scores, sports_standings, sports_teaminfo, sports_headlines, weather, comics, pokemon, movies, music, sudoku, dadjoke
 
 IMG_DIR = os.path.join(CUR_DIR, '..', 'tex', 'images')
 DATA_DIR = os.path.join(CUR_DIR, '..', 'tex', 'data')
@@ -94,6 +94,13 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 	print('SUDOKU MINI')
 	try:
 		sudoku_mini.main(outdir=paths['datadir'])
+	except Exception as error:
+		pass_or_raise(error, debug)
+
+	# joke: writes .tex
+	print('JOKE')
+	try:
+		dadjoke.main(outdir=paths['datadir'])
 	except Exception as error:
 		pass_or_raise(error, debug)
 
