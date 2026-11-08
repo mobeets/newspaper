@@ -84,7 +84,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 	print('SUDOKU - NYTIMES')
 	# sudoku: writes. tex
 	try:
-		modes = ['easy', 'easy', 'medium', 'medium', 'hard', 'hard', 'hard']
+		modes = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard', 'hard']
 		mode = modes[datetime.now().weekday() % len(modes)]
 		sudoku.main(mode, outdir=paths['datadir'], cached=cached)
 	except Exception as error:

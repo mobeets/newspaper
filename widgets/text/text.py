@@ -35,4 +35,4 @@ def main(cached=True):
         content = fetch()
 
 if __name__ == '__main__':
-    main(cached=True)
+    main(cached=False)
