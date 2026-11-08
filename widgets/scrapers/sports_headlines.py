@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from pylatexenc.latexencode import unicode_to_latex
 from base import Scraper, CACHE_DIR
 
-BASE_URLS = {'sports': 'https://apnews.com/sports', 'music': 'https://pitchfork.com/reviews/best/albums/'}
+BASE_URLS = {'sports': 'https://apnews.com/sports'}
 
 MAX_HEADLINES = 3
 
@@ -33,10 +33,6 @@ def main(name='sports', cached=True, outdir=CACHE_DIR):
 		sc = Scraper(url=BASE_URLS[name], cache_file='{}-news'.format(name), try_cache=cached)
 		headlines = get_headlines(sc.soup)
 		render(headlines, outfile)
-	elif name == 'music':
-		sc = PitchforkReview(url=BASE_URLS[name], cache_file='{}-news'.format(name), try_cache=cached)
-		review = sc.get()
-		outfile = sc.render(review, outfile)
 
 if __name__ == '__main__':
 	main()

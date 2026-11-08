@@ -6,9 +6,13 @@ from datetime import datetime, timedelta
 from pylatexenc.latexencode import unicode_to_latex
 from base import Scraper, CACHE_DIR
 
+YEAR = '2027'
+NBA_URL = lambda ABBREV: f'https://www.basketball-reference.com/teams/{ABBREV}/{YEAR}.html'
+NHL_URL = lambda ABBREV: f'https://www.hockey-reference.com/teams/{ABBREV}/{YEAR}.html'
 BASE_URLS = {
-	'Dallas Mavericks': 'https://www.basketball-reference.com/teams/DAL/2024.html',
-	'Boston Bruins': 'https://www.hockey-reference.com/teams/BOS/2024.html'
+	'Houston Rockets': NBA_URL('HOU'),
+	'Dallas Mavericks': NBA_URL('DAL'),
+	'Boston Bruins': NHL_URL('BOS')
 	}
 
 class TeamInfo(Scraper):
@@ -46,4 +50,4 @@ def main(team_name, cached=True, outdir=CACHE_DIR):
 
 if __name__ == '__main__':
 	main(team_name='Dallas Mavericks', cached=False)
-	main(team_name='Boston Bruins', cached=False)
+	main(team_name='Houston Rockets', cached=False)

@@ -174,7 +174,7 @@ def plot(weather, city, outfile=None):
 		plt.savefig(outfile)
 	plt.close()
 
-def main(city='Somerville', outdir=CACHE_DIR, cached=True):
+def main(city='Houston', outdir=CACHE_DIR, cached=True):
 	weather = load_cached_weather() if (cached and is_cached()) else fetch_weather()
 	outfile = os.path.join(outdir, 'weather.png')
 	plot(weather, city, outfile)

@@ -62,7 +62,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 
 	# sports scores/standings: writes .tex
 	print('SPORTS SCORES')
-	for sport_name in ['NBA', 'NHL']:
+	for sport_name in ['NBA']:#, 'NHL']:
 		try:
 			sports_scores.main(sport_name, outdir=paths['datadir'], cached=cached)
 		except Exception as error:
@@ -74,7 +74,7 @@ def run_widgets(paths=DEFAULT_PATHS, cached=True, debug=False):
 
 	# sports team info
 	print('SPORTS TEAMS')
-	for team_name in ['Dallas Mavericks', 'Boston Bruins']:
+	for team_name in ['Houston Rockets', 'Dallas Mavericks']:
 		try:
 			sports_teaminfo.main(team_name, outdir=paths['datadir'], cached=cached)
 		except Exception as error:

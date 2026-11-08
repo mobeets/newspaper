@@ -18,9 +18,9 @@
 
 \SetPaperName{Thė Daily Hennig}
 \SetHeaderName{The Daily Hennig}
-\SetPaperLocation{Somerville, MA}
-\SetPaperSlogan{R: Red coat, purple shoes, pass. side; J: Blue coat, blue shoes, driver side}
-%\SetPaperSlogan{R: Blue coat, mixed shoes, driver side; J: Red coat, mixed shoes, pass. side}
+\SetPaperLocation{Houston, TX}
+\SetPaperSlogan{R: shower first; J: shower second}
+%\SetPaperSlogan{R: showed second; J: shower first}
 \SetPaperPrice{\$0.00}
 
 \usepackage{graphicx}
@@ -54,26 +54,35 @@
 \begin{center}
 	\input{data/scores-NBA.tex}
 \end{center}
+
+\begin{minipage}{0.1\linewidth}
+	\includegraphics[width=\linewidth]{images/rockets-logo.png}
+\end{minipage}
+\begin{minipage}{0.9\linewidth}
+	\input{data/teams-HoustonRockets.tex}
+\end{minipage}
+
 \begin{minipage}{0.1\linewidth}
 	\includegraphics[width=\linewidth]{images/mavs-logo.png}
 \end{minipage}
 \begin{minipage}{0.9\linewidth}
 	\input{data/teams-DallasMavericks.tex}
 \end{minipage}
-% \begin{center}
-% 	\input{data/standings-NBA.tex}
-% \end{center}
 
-\hrule
 \begin{center}
-	\input{data/scores-NHL.tex}
+	\input{data/standings-NBA.tex}
 \end{center}
-\begin{minipage}{0.1\linewidth}
-	\includegraphics[width=\linewidth]{images/bruins-logo.png}
-\end{minipage}
-\begin{minipage}{0.9\linewidth}
-	\input{data/teams-BostonBruins.tex}
-\end{minipage}
+
+% \hrule
+% \begin{center}
+% 	\input{data/scores-NHL.tex}
+% \end{center}
+% \begin{minipage}{0.1\linewidth}
+% 	\includegraphics[width=\linewidth]{images/bruins-logo.png}
+% \end{minipage}
+% \begin{minipage}{0.9\linewidth}
+% 	\input{data/teams-BostonBruins.tex}
+% \end{minipage}
 
 \clearpage
 \headline{Games \& Comics}

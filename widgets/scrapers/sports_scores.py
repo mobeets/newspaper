@@ -11,7 +11,7 @@ BASE_URLS = {
 	'NBA': 'https://www.basketball-reference.com/',
 	'NHL': 'https://www.hockey-reference.com/'
 	}
-TEAM_PREFS = ['Boston', 'Dallas', 'Pittsburgh']
+TEAM_PREFS = ['Houston', 'Dallas', 'Boston', 'Pittsburgh']
 
 class BoxScores(Scraper):
 	def get_score(self, team, prefix=''):
@@ -74,4 +74,4 @@ def main(sport, cached=True, outdir=CACHE_DIR):
 
 if __name__ == '__main__':
 	main(sport='NBA', cached=False)
-	main(sport='NHL', cached=False)
+	# main(sport='NHL', cached=False)

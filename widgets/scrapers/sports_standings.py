@@ -60,4 +60,4 @@ def main(sport, cached=True, outdir=CACHE_DIR):
 
 if __name__ == '__main__':
 	main(sport='NBA', cached=True)
-	main(sport='NHL', cached=True)
+	# main(sport='NHL', cached=True)

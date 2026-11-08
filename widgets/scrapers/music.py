@@ -61,4 +61,4 @@ def main(name='music', cached=True, outdir=CACHE_DIR):
 	outfile = sc.render(review, outfile)
 
 if __name__ == '__main__':
-	main(cached=True)
+	main(cached=False)
