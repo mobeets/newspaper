@@ -2,6 +2,7 @@ import json
 import os.path
 import pathlib
 import random
+import re
 from urllib.parse import urljoin
 
 import requests
@@ -122,6 +123,13 @@ def add_movie_info(item):
     synopsis = soup.select_one('[data-qa="synopsis-value"], [data-qa="movie-info-synopsis"]')
     if not schema and not synopsis and not info:
         raise RuntimeError(f"No movie details found at {item['movie_url']}")
+    item['year'] = ''
+    for release_date in (schema.get('datePublished'), schema.get('dateCreated'),
+                         info.get('release date (theaters)')):
+        match = re.search(r'\b(?:18|19|20|21)\d{2}\b', str(release_date or ''))
+        if match:
+            item['year'] = match.group(0)
+            break
     genres = schema.get('genre', [])
     if isinstance(genres, str):
         genres = [genres]
@@ -157,6 +165,8 @@ def render(item, outfile, max_summary_len=MAX_SUMMARY_LEN):
     out = 'No new movies today.'
     if item.get('name'):
         out = r'\textbf{' + unicode_to_latex(item['name']) + '}'
+        if item.get('year'):
+            out += ' ({})'.format(unicode_to_latex(str(item['year'])))
         if item.get('meta'):
             out += ' ({})'.format(unicode_to_latex(item['meta']))
         if item.get('summary'):
